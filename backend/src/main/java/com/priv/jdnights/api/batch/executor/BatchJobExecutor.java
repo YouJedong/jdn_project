@@ -15,7 +15,7 @@ public class BatchJobExecutor {
     // 유튜브
 
     // 넥스트 클래스
-//    @Scheduled(cron = "*/5 * * * * ?")
+    @Scheduled(cron = "* 27 23 * * ?")
     public void getNextClassContentsInfo() {
         contentsBatchService.getNextClassContentsInfo();
 
