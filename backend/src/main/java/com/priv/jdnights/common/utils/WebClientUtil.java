@@ -1,17 +1,23 @@
 package com.priv.jdnights.common.utils;
 
 import com.priv.jdnights.common.exception.LogicException;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.netty.http.client.HttpClient;
 
 @Component
 public class WebClientUtil {
 
     private final WebClient webClient;
 
-    public WebClientUtil(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.build();
+    @Autowired
+    public WebClientUtil(WebClient webClient) {
+        this.webClient = webClient;
     }
 
     public <T> T get(String url, Class<T> responseType) {

@@ -12,10 +12,12 @@ import reactor.netty.http.client.HttpClient;
 
 import javax.net.ssl.SSLException;
 
+// TODO 현재 인증서 무시로 해논 설정을 상용 반영 시 수정해야함
 @Configuration
 public class WebClientConfig {
     @Bean
     public WebClient createWebClient() throws SSLException {
+
         SslContext sslContext = SslContextBuilder
                 .forClient()
                 .trustManager(InsecureTrustManagerFactory.INSTANCE)
