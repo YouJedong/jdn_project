@@ -17,6 +17,7 @@ public class BatchSetting extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "batch_id")
     private Long id;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(4) COMMENT '배치 이름 타입'")

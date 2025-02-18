@@ -1,9 +1,9 @@
-package com.priv.jdnights.api.batch.vo;
+package com.priv.jdnights.api.batch.dto;
 
 import lombok.Data;
 
 @Data
-public class NextClassContentVO {
+public class NextClassContentDto {
 
     private Long ncId;
     private String contentName;

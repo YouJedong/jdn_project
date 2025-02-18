@@ -2,9 +2,12 @@ package com.priv.jdnights.api.batch.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.priv.jdnights.api.batch.vo.NextClassContentVO;
+import com.priv.jdnights.api.batch.dto.NextClassContentDto;
+import com.priv.jdnights.api.contents.entity.Content;
+import com.priv.jdnights.api.contents.repository.ContentRepository;
 import com.priv.jdnights.common.exception.LogicException;
 import com.priv.jdnights.common.utils.WebClientUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,6 +26,9 @@ public class NextClassBatchService {
     public NextClassBatchService(WebClientUtil webClientUtil) {
         this.webClientUtil = webClientUtil;
     }
+
+    @Autowired
+    private ContentRepository contentRepository;
 
     @Value("${external.apis.nextclass.base-url}")
     private String NC_BASE_URL;
@@ -37,7 +44,7 @@ public class NextClassBatchService {
 
         // insert or update
         if (totalPage > 0) {
-            List<NextClassContentVO> contentList = new ArrayList<>();
+            List<NextClassContentDto> contentList = new ArrayList<>();
             for (int i = 0; i < totalPage; i++) {
                 int reqPage = i + 1;
 
@@ -49,8 +56,12 @@ public class NextClassBatchService {
                 contentList.addAll(this.getContentsByJson(result));
             }
 
-            for (NextClassContentVO vo : contentList) {
-                System.out.println("vo = " + vo);
+            if (!contentList.isEmpty()) {
+                List<Content> entityList = contentList.stream()
+                        .map(Content::generateByNextClass) // 변환 로직 필요
+                        .collect(Collectors.toList());
+
+                contentRepository.saveAll(entityList);
             }
         }
 
@@ -71,16 +82,16 @@ public class NextClassBatchService {
         }
     }
 
-    private List<NextClassContentVO> getContentsByJson(String json) {
+    private List<NextClassContentDto> getContentsByJson(String json) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(json);
             JsonNode items = rootNode.path("pageProps").path("courses").path("items");
 
             if (items.isArray()) {
-                ArrayList<NextClassContentVO> contentList = new ArrayList<>();
+                ArrayList<NextClassContentDto> contentList = new ArrayList<>();
                 for (JsonNode item : items) {
-                    NextClassContentVO content = new NextClassContentVO();
+                    NextClassContentDto content = new NextClassContentDto();
                     content.setNcId(item.path("id").asLong());
                     content.setContentName(item.path("name").asText());
                     content.setThumbnailUrl(item.path("thumbnailUrl").asText());
