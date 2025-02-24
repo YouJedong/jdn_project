@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.priv.jdnights.api.batch.dto.NextClassContentDto;
 import com.priv.jdnights.api.contents.entity.Content;
+import com.priv.jdnights.api.contents.entity.ContentLang;
 import com.priv.jdnights.api.contents.repository.ContentRepository;
+import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.exception.LogicException;
 import com.priv.jdnights.common.utils.WebClientUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.priv.jdnights.common.Constants.*;
+
 
 @Service
 @Transactional
@@ -44,7 +49,7 @@ public class NextClassBatchService {
 
         // insert or update
         if (totalPage > 0) {
-            List<NextClassContentDto> contentList = new ArrayList<>();
+            List<NextClassContentDto> contentDtoList = new ArrayList<>();
             for (int i = 0; i < totalPage; i++) {
                 int reqPage = i + 1;
 
@@ -53,15 +58,36 @@ public class NextClassBatchService {
                         .toUriString();
                 result = webClientUtil.get(url, String.class);
 
-                contentList.addAll(this.getContentsByJson(result));
+                contentDtoList.addAll(this.getContentsByJson(result));
             }
 
-            if (!contentList.isEmpty()) {
-                List<Content> entityList = contentList.stream()
-                        .map(Content::generateByNextClass) // 변환 로직 필요
-                        .collect(Collectors.toList());
+            if (!contentDtoList.isEmpty()) {
+//                List<Content> contentList = contentDtoList.stream()
+//                        .map(Content::generateByNextClass) // 변환 로직 필요
+//                        .collect(Collectors.toList());
+//                contentRepository.saveAll(contentList);
+                for (NextClassContentDto dto : contentDtoList) {
+                    Content findContent = contentRepository.findByExternalId(dto.getNcId());
 
-                contentRepository.saveAll(entityList);
+                    if (findContent == null) { // insert
+                        ArrayList<ContentLang> contentLangList = new ArrayList<>();
+                        for (String langCode : LangCode.LANG_ARR) {
+                            // 한국어일때만 제목 넣기
+                            String contentName = null;
+                            if (langCode.equals(LangCode.KO)) {
+                                contentName = dto.getContentName();
+                            }
+                            contentLangList.add(ContentLang.createContentLang(langCode, contentName));
+                        }
+                        Content content = ; 애매.. 여기부터 다시
+
+                    } else { // update
+
+                    }
+
+                }
+
+
             }
         }
 

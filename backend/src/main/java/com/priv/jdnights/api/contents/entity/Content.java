@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -21,8 +24,8 @@ public class Content extends BaseEntity {
     @Column(nullable = false)
     private Long externalId;
 
-    @Column(nullable = false)
-    private String contentName;
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ContentLang> contentLangList = new ArrayList<>();
 
     private String thumbnailUrl;
 
@@ -32,10 +35,11 @@ public class Content extends BaseEntity {
 
     private Content(Long externalId, String contentName, String thumbnailUrl, String externalCreatedAt, String externalUpdateAt) {
         this.externalId = externalId;
-        this.contentName = contentName;
         this.thumbnailUrl = thumbnailUrl;
         this.externalCreatedAt = externalCreatedAt;
         this.externalUpdateAt = externalUpdateAt;
+        this.contentLangList = ContentLang.createAllLang(this);
+        //this.contentName = contentName;
     }
 
     public static Content generateByNextClass(NextClassContentDto nextClass) {
