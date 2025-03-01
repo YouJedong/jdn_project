@@ -13,4 +13,9 @@ public interface Constants {
         public static final String[] LANG_ARR = {KO, EN, JA, ZH};
     }
 
+    public class ContentType {
+        public static final String NEXT_CLASS = "001";
+
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.priv.jdnights.api.contents.entity;
 
+import com.priv.jdnights.api.batch.dto.NextClassContentDto;
 import com.priv.jdnights.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -35,5 +36,9 @@ public class ContentLang extends BaseEntity {
         contentLang.setContentName(contentName);
 
         return contentLang;
+    }
+
+    public void updateByNextClass(NextClassContentDto dto) {
+        this.setContentName(dto.getContentName());
     }
 }

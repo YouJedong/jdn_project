@@ -5,10 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.priv.jdnights.api.batch.dto.NextClassContentDto;
 import com.priv.jdnights.api.contents.entity.Content;
 import com.priv.jdnights.api.contents.entity.ContentLang;
+import com.priv.jdnights.api.contents.repository.ContentLangRepository;
 import com.priv.jdnights.api.contents.repository.ContentRepository;
 import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.exception.LogicException;
 import com.priv.jdnights.common.utils.WebClientUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,8 @@ import static com.priv.jdnights.common.Constants.*;
 @Transactional
 public class NextClassBatchService {
 
+    private static final Logger log = LoggerFactory.getLogger(NextClassBatchService.class);
+
     private final WebClientUtil webClientUtil;
 
     public NextClassBatchService(WebClientUtil webClientUtil) {
@@ -34,6 +39,10 @@ public class NextClassBatchService {
 
     @Autowired
     private ContentRepository contentRepository;
+    @Autowired
+    private ContentLangRepository contentLangRepository;
+
+
 
     @Value("${external.apis.nextclass.base-url}")
     private String NC_BASE_URL;
@@ -46,6 +55,8 @@ public class NextClassBatchService {
                 .toUriString();
         String result = webClientUtil.get(url, String.class);
         int totalPage = this.getTotalPageByJson(result);
+
+        log.info("넥스트 클래스 총 페이지 수 : {}", totalPage);
 
         // insert or update
         if (totalPage > 0) {
@@ -60,12 +71,9 @@ public class NextClassBatchService {
 
                 contentDtoList.addAll(this.getContentsByJson(result));
             }
+            log.info("넥스트 클래스 총 콘텐츠 수 : {}", contentDtoList.size());
 
             if (!contentDtoList.isEmpty()) {
-//                List<Content> contentList = contentDtoList.stream()
-//                        .map(Content::generateByNextClass) // 변환 로직 필요
-//                        .collect(Collectors.toList());
-//                contentRepository.saveAll(contentList);
                 for (NextClassContentDto dto : contentDtoList) {
                     Content findContent = contentRepository.findByExternalId(dto.getNcId());
 
@@ -79,9 +87,16 @@ public class NextClassBatchService {
                             }
                             contentLangList.add(ContentLang.createContentLang(langCode, contentName));
                         }
-                        Content content = ; 애매.. 여기부터 다시
+                        Content content = Content.createByNextClass(dto, contentLangList);
+                        contentRepository.save(content);
 
                     } else { // update
+                        ContentLang contentLang = contentLangRepository.findByContentAndLangCode(findContent, LangCode.KO)
+                                .orElse(null);
+
+                        if (contentLang != null) {
+                            contentLang.updateByNextClass(dto); 여기부터 고고
+                        }
 
                     }
 

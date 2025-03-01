@@ -1,6 +1,7 @@
 package com.priv.jdnights.api.contents.entity;
 
 import com.priv.jdnights.api.batch.dto.NextClassContentDto;
+import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.priv.jdnights.common.Constants.*;
 
 @Entity
 @Getter
@@ -24,29 +27,45 @@ public class Content extends BaseEntity {
     @Column(nullable = false)
     private Long externalId;
 
+    @Column(nullable = false)
+    private String contentType;
+
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContentLang> contentLangList = new ArrayList<>();
 
     private String thumbnailUrl;
 
+    private Integer rating;
+
+    private Integer price;
+
+    private Integer studentCount;
+
     private String externalCreatedAt;
 
     private String externalUpdateAt;
 
-    private Content(Long externalId, String contentName, String thumbnailUrl, String externalCreatedAt, String externalUpdateAt) {
-        this.externalId = externalId;
-        this.thumbnailUrl = thumbnailUrl;
-        this.externalCreatedAt = externalCreatedAt;
-        this.externalUpdateAt = externalUpdateAt;
-        this.contentLangList = ContentLang.createAllLang(this);
-        //this.contentName = contentName;
+    private void addLangList(List<ContentLang> langList) {
+        for (ContentLang contentLang : langList) {
+            contentLangList.add(contentLang);
+            contentLang.setContent(this);
+        }
     }
 
-    public static Content generateByNextClass(NextClassContentDto nextClass) {
-        return new Content(nextClass.getNcId(), nextClass.getContentName(),
-                nextClass.getThumbnailUrl(), nextClass.getCreatedAt(), nextClass.getUpdatedAt());
+    public static Content createByNextClass(NextClassContentDto dto, List<ContentLang> langList) {
+        Content nextClassContent = new Content();
+        nextClassContent.setExternalId(dto.getNcId());
+        nextClassContent.setContentType(ContentType.NEXT_CLASS);
+        nextClassContent.setThumbnailUrl(dto.getThumbnailUrl());
+        nextClassContent.setRating(dto.getRating());
+        nextClassContent.setPrice(dto.getPrice());
+        nextClassContent.setStudentCount(dto.getStudentCount());
+        nextClassContent.setExternalCreatedAt(dto.getCreatedAt());
+        nextClassContent.setExternalUpdateAt(dto.getUpdatedAt());
+        nextClassContent.addLangList(langList);
+
+        return nextClassContent;
     }
 
 
-    // 따로 넥클 정보는 fk로 관리
 }
