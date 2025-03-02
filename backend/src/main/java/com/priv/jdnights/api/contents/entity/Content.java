@@ -68,4 +68,21 @@ public class Content extends BaseEntity {
     }
 
 
+    public void updateByNextClass(NextClassContentDto dto) {
+        if (!this.price.equals(dto.getPrice())) {
+            this.price = dto.getPrice();
+        }
+        if (!this.rating.equals(dto.getRating())) {
+            this.rating = dto.getRating();
+        }
+        if (!this.studentCount.equals(dto.getStudentCount())) {
+            this.studentCount = dto.getStudentCount();
+        }
+        if (!this.externalUpdateAt.equals(dto.getUpdatedAt())) {
+            this.externalUpdateAt = dto.getUpdatedAt();
+        }
+        if (!this.thumbnailUrl.equals(dto.getThumbnailUrl())) {
+            this.thumbnailUrl = dto.getThumbnailUrl();
+        }
+    }
 }

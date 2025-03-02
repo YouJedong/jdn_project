@@ -39,6 +39,6 @@ public class ContentLang extends BaseEntity {
     }
 
     public void updateByNextClass(NextClassContentDto dto) {
-        this.setContentName(dto.getContentName());
+        this.contentName = dto.getContentName();
     }
 }

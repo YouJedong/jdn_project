@@ -42,8 +42,6 @@ public class NextClassBatchService {
     @Autowired
     private ContentLangRepository contentLangRepository;
 
-
-
     @Value("${external.apis.nextclass.base-url}")
     private String NC_BASE_URL;
 
@@ -62,7 +60,7 @@ public class NextClassBatchService {
         if (totalPage > 0) {
             List<NextClassContentDto> contentDtoList = new ArrayList<>();
             for (int i = 0; i < totalPage; i++) {
-                int reqPage = i + 1;
+                int reqPage = totalPage - i;
 
                 url = UriComponentsBuilder.fromUriString(NC_BASE_URL)
                         .queryParam("coursePage", reqPage)
@@ -95,7 +93,8 @@ public class NextClassBatchService {
                                 .orElse(null);
 
                         if (contentLang != null) {
-                            contentLang.updateByNextClass(dto); 여기부터 고고
+                            contentLang.updateByNextClass(dto);
+                            findContent.updateByNextClass(dto); 왜 업데이트가 안될까?
                         }
 
                     }
