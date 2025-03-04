@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.priv.jdnights.api.batch.dto.NextClassContentDto;
 import com.priv.jdnights.api.contents.entity.Content;
 import com.priv.jdnights.api.contents.entity.ContentLang;
+import com.priv.jdnights.api.contents.listener.ContentLangListener;
+import com.priv.jdnights.api.contents.listener.ContentListener;
 import com.priv.jdnights.api.contents.repository.ContentLangRepository;
 import com.priv.jdnights.api.contents.repository.ContentRepository;
 import com.priv.jdnights.common.Constants;
@@ -45,6 +47,7 @@ public class NextClassBatchService {
     @Value("${external.apis.nextclass.base-url}")
     private String NC_BASE_URL;
 
+
     public void getNextClassContentsInfo() {
 
         // 페이지 수 조회
@@ -71,6 +74,8 @@ public class NextClassBatchService {
             }
             log.info("넥스트 클래스 총 콘텐츠 수 : {}", contentDtoList.size());
 
+            Integer insertCount = 0;
+            Integer updateCount = 0;
             if (!contentDtoList.isEmpty()) {
                 for (NextClassContentDto dto : contentDtoList) {
                     Content findContent = contentRepository.findByExternalId(dto.getNcId());
@@ -88,21 +93,29 @@ public class NextClassBatchService {
                         Content content = Content.createByNextClass(dto, contentLangList);
                         contentRepository.save(content);
 
+                        // 등록 카운트
+                        insertCount++;
+
                     } else { // update
                         ContentLang contentLang = contentLangRepository.findByContentAndLangCode(findContent, LangCode.KO)
                                 .orElse(null);
 
                         if (contentLang != null) {
                             contentLang.updateByNextClass(dto);
-                            findContent.updateByNextClass(dto); 왜 업데이트가 안될까?
+                            findContent.updateByNextClass(dto);
                         }
-
+                        // 수정 카운트
+                        updateCount =+ ContentLangListener.getUpdateCount() + ContentListener.getUpdateCount() > 0 ? 1 : 0;
                     }
 
                 }
 
 
             }
+            System.out.println("updateCount = " + updateCount); 업데이트 카운트 다시 세기
+            System.out.println("insertCount = " + insertCount);
+
+
         }
 
         // 이력 insert

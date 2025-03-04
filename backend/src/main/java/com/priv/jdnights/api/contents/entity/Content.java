@@ -1,6 +1,7 @@
 package com.priv.jdnights.api.contents.entity;
 
 import com.priv.jdnights.api.batch.dto.NextClassContentDto;
+import com.priv.jdnights.api.contents.listener.ContentListener;
 import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -17,6 +18,7 @@ import static com.priv.jdnights.common.Constants.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@EntityListeners(ContentListener.class)
 public class Content extends BaseEntity {
 
     @Id
