@@ -1,7 +1,6 @@
 package com.priv.jdnights.api.contents.entity;
 
 import com.priv.jdnights.api.batch.dto.NextClassContentDto;
-import com.priv.jdnights.api.contents.listener.ContentLangListener;
 import com.priv.jdnights.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,7 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@EntityListeners(ContentLangListener.class)
 public class ContentLang extends BaseEntity {
 
     @Id

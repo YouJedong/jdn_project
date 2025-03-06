@@ -3,10 +3,10 @@ package com.priv.jdnights.api.batch.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.priv.jdnights.api.batch.dto.NextClassContentDto;
+import com.priv.jdnights.api.batch.entity.BatchHst;
+import com.priv.jdnights.api.batch.repository.BatchHstRepository;
 import com.priv.jdnights.api.contents.entity.Content;
 import com.priv.jdnights.api.contents.entity.ContentLang;
-import com.priv.jdnights.api.contents.listener.ContentLangListener;
-import com.priv.jdnights.api.contents.listener.ContentListener;
 import com.priv.jdnights.api.contents.repository.ContentLangRepository;
 import com.priv.jdnights.api.contents.repository.ContentRepository;
 import com.priv.jdnights.common.Constants;
@@ -44,6 +44,9 @@ public class NextClassBatchService {
     @Autowired
     private ContentLangRepository contentLangRepository;
 
+    @Autowired
+    private BatchHstRepository batchHstRepository;
+
     @Value("${external.apis.nextclass.base-url}")
     private String NC_BASE_URL;
 
@@ -60,6 +63,9 @@ public class NextClassBatchService {
         log.info("넥스트 클래스 총 페이지 수 : {}", totalPage);
 
         // insert or update
+        Integer insertCnt = null;
+        Integer updateCnt = null;
+        Integer totalCnt = null;
         if (totalPage > 0) {
             List<NextClassContentDto> contentDtoList = new ArrayList<>();
             for (int i = 0; i < totalPage; i++) {
@@ -73,9 +79,10 @@ public class NextClassBatchService {
                 contentDtoList.addAll(this.getContentsByJson(result));
             }
             log.info("넥스트 클래스 총 콘텐츠 수 : {}", contentDtoList.size());
+            totalCnt = contentDtoList.size();
 
-            Integer insertCount = 0;
-            Integer updateCount = 0;
+            insertCnt = 0;
+            updateCnt = 0;
             if (!contentDtoList.isEmpty()) {
                 for (NextClassContentDto dto : contentDtoList) {
                     Content findContent = contentRepository.findByExternalId(dto.getNcId());
@@ -94,7 +101,7 @@ public class NextClassBatchService {
                         contentRepository.save(content);
 
                         // 등록 카운트
-                        insertCount++;
+                        insertCnt++;
 
                     } else { // update
                         ContentLang contentLang = contentLangRepository.findByContentAndLangCode(findContent, LangCode.KO)
@@ -103,24 +110,19 @@ public class NextClassBatchService {
                         if (contentLang != null) {
                             contentLang.updateByNextClass(dto);
                             findContent.updateByNextClass(dto);
+
+                            updateCnt++;
                         }
-                        // 수정 카운트
-                        updateCount =+ ContentLangListener.getUpdateCount() + ContentListener.getUpdateCount() > 0 ? 1 : 0;
+
                     }
 
                 }
-
-
             }
-            System.out.println("updateCount = " + updateCount); 업데이트 카운트 다시 세기
-            System.out.println("insertCount = " + insertCount);
-
-
         }
 
         // 이력 insert
-
-
+        BatchHst batchHst = BatchHst.createBatchHst(ContentType.NEXT_CLASS, totalCnt, insertCnt, updateCnt);
+        batchHstRepository.save(batchHst);
 
 
     }
