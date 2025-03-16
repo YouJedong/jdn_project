@@ -23,7 +23,6 @@ public class BatchJobExecutor {
 //    @Scheduled(cron = "* 27 23 * * ?")
     public void getNextClassContentsInfo() {
         nextClassBatchService.getNextClassContentsInfo();
-
     }
 
     // 풀스코어

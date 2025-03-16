@@ -21,4 +21,10 @@ public class HelloController {
     public void ncTest() {
         batchJobExecutor.getNextClassContentsInfo();
     }
+
+    @GetMapping(value = "/yt")
+    public void ytTest() {
+        batchJobExecutor.getYouTubeContentsInfo();
+    }
+
 }
