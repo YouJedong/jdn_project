@@ -26,7 +26,7 @@ public class Content extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Long externalId;
+    private String externalId;
 
     @Column(nullable = false)
     private String contentType;
@@ -58,7 +58,7 @@ public class Content extends BaseEntity {
 
     public static Content createByNextClass(NextClassContentDto dto, List<ContentLang> langList) {
         Content nextClassContent = new Content();
-        nextClassContent.setExternalId(dto.getNcId());
+        nextClassContent.setExternalId(dto.getNcId().toString());
         nextClassContent.setContentType(ContentType.NEXT_CLASS);
         nextClassContent.setThumbnailUrl(dto.getThumbnailUrl());
         nextClassContent.setRating(dto.getRating());
