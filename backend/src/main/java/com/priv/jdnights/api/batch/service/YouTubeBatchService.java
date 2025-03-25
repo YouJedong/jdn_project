@@ -205,7 +205,7 @@ public class YouTubeBatchService {
                     content.setTitle(itemInfo.path("title").asText());
                     content.setDescription(itemInfo.path("description").asText());
                     content.setThumbnailUrl(itemInfo.path("thumbnails").path("maxres").path("url").asText());
-                    if (StringUtils.hasText(content.getThumbnailUrl())) {
+                    if (!StringUtils.hasText(content.getThumbnailUrl())) {
                         content.setThumbnailUrl(itemInfo.path("thumbnails").path("high").path("url").asText());
                     }
                     content.setPublishedAt(itemInfo.path("publishedAt").asText());

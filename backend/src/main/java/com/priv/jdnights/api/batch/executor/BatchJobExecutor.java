@@ -1,5 +1,6 @@
 package com.priv.jdnights.api.batch.executor;
 
+import com.priv.jdnights.api.batch.service.FullScoreBatchService;
 import com.priv.jdnights.api.batch.service.NextClassBatchService;
 import com.priv.jdnights.api.batch.service.YouTubeBatchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class BatchJobExecutor {
     @Autowired
     private YouTubeBatchService youTubeBatchService;
 
+    @Autowired
+    private FullScoreBatchService fullScoreBatchService;
+
     // 유튜브
     public void getYouTubeContentsInfo() {
         youTubeBatchService.getYouTubeContentsInfo();
@@ -26,6 +30,9 @@ public class BatchJobExecutor {
     }
 
     // 풀스코어
+    public void getFullScoreContentsInfo() {
+        fullScoreBatchService.getFullScoreContentsInfo();
+    }
 
 
 }
