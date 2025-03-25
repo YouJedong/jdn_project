@@ -8,12 +8,20 @@ import com.priv.jdnights.api.batch.dto.NextClassContentDto;
 import com.priv.jdnights.api.batch.dto.YoutubeContentDto;
 import com.priv.jdnights.api.batch.dto.YoutubeDetailDto;
 import com.priv.jdnights.api.batch.dto.YoutubeListResultDto;
+import com.priv.jdnights.api.batch.entity.BatchHst;
+import com.priv.jdnights.api.batch.repository.BatchHstRepository;
+import com.priv.jdnights.api.contents.entity.Content;
+import com.priv.jdnights.api.contents.entity.ContentLang;
+import com.priv.jdnights.api.contents.repository.ContentRepository;
+import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.exception.LogicException;
 import com.priv.jdnights.common.utils.WebClientUtil;
 import lombok.extern.java.Log;
 import org.apache.logging.log4j.LogManager;
 
 import org.apache.logging.log4j.Logger;
+import org.hibernate.engine.jdbc.batch.spi.Batch;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,18 +34,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.priv.jdnights.common.Constants.*;
+
 @Service
 @Transactional
 public class YouTubeBatchService {
 
     private static final Logger log = LogManager.getLogger(YouTubeBatchService.class);
 
-
     private final WebClientUtil webClientUtil;
     public YouTubeBatchService(WebClientUtil webClientUtil) {
         this.webClientUtil = webClientUtil;
     }
 
+    @Autowired
+    private ContentRepository contentRepository;
+
+    @Autowired
+    private BatchHstRepository batchHstRepository;
 
     @Value("${external.apis.youtube.base-url}")
     private String YT_BASE_URL;
@@ -55,6 +69,10 @@ public class YouTubeBatchService {
 
 
     public void getYouTubeContentsInfo() {
+
+        Integer insertCnt = null;
+        Integer updateCnt = null;
+        Integer totalCnt = null;
 
         String nextPageToken = null;
         try {
@@ -77,7 +95,11 @@ public class YouTubeBatchService {
 
             } while (nextPageToken != null && !nextPageToken.isEmpty());
 
+            log.info("유튜브 총 콘텐츠 수 : {}", contentDtoList.size());
+            totalCnt = contentDtoList.size();
 
+            insertCnt = 0;
+            updateCnt = 0;
             if (!contentDtoList.isEmpty()) {
 
                 List<String> videoIds = contentDtoList.stream()
@@ -100,12 +122,40 @@ public class YouTubeBatchService {
                     }
                 }
 
-                for (YoutubeContentDto contentDto : contentDtoList) {
-                    System.out.println("contentDto = " + contentDto);
+                for (YoutubeContentDto dto : contentDtoList) {
+                    Content findContent = contentRepository.findByExternalId(dto.getVideoId());
+
+                    if (findContent == null) { // insert
+                        ArrayList<ContentLang> contentLangList = new ArrayList<>();
+                        for (String langCode : LangCode.LANG_ARR) {
+                            // 한국어일때만 제목 넣기
+                            String contentName = null;
+                            String description = null;
+                            if(langCode.equals(LangCode.KO)) {
+                                contentName = dto.getTitle();
+                                description = dto.getDescription();
+                            }
+                            contentLangList.add(ContentLang.createContentLang(langCode, contentName, description));
+                        }
+                        Content content = Content.createByYoutube(dto, contentLangList);
+                        contentRepository.save(content);
+
+                        // 등록 카운트
+                        insertCnt++;
+
+                    } else { // update
+
+                        // 영상 통계만 update
+                        findContent.updateByYoutube(dto);
+
+                        updateCnt++;
+                    }
                 }
             }
 
             // 이력 쌓기
+            BatchHst batchHst = BatchHst.createBatchHst(ContentType.YOUTUBE, totalCnt, insertCnt, updateCnt);
+            batchHstRepository.save(batchHst);
 
         } catch (LogicException e) {
             log.error("유튜브 배치 실패", e.toString());
@@ -153,7 +203,11 @@ public class YouTubeBatchService {
                     YoutubeContentDto content = new YoutubeContentDto();
                     content.setVideoId(itemInfo.path("resourceId").path("videoId").asText());
                     content.setTitle(itemInfo.path("title").asText());
+                    content.setDescription(itemInfo.path("description").asText());
                     content.setThumbnailUrl(itemInfo.path("thumbnails").path("maxres").path("url").asText());
+                    if (StringUtils.hasText(content.getThumbnailUrl())) {
+                        content.setThumbnailUrl(itemInfo.path("thumbnails").path("high").path("url").asText());
+                    }
                     content.setPublishedAt(itemInfo.path("publishedAt").asText());
                     resultDto.getYoutubeContentDtoList().add(content);
                 }

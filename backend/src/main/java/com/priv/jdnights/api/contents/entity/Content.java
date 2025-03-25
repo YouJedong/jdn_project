@@ -1,6 +1,7 @@
 package com.priv.jdnights.api.contents.entity;
 
 import com.priv.jdnights.api.batch.dto.NextClassContentDto;
+import com.priv.jdnights.api.batch.dto.YoutubeContentDto;
 import com.priv.jdnights.api.contents.enums.ContentStatus;
 import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.entity.BaseEntity;
@@ -42,6 +43,12 @@ public class Content extends BaseEntity {
 
     private Integer studentCount;
 
+    private Long viewCount;
+
+    private Long likeCount;
+
+    private Long commentCount;
+
     private String externalCreatedAt;
 
     private String externalUpdateAt;
@@ -66,10 +73,25 @@ public class Content extends BaseEntity {
         nextClassContent.setStudentCount(dto.getStudentCount());
         nextClassContent.setExternalCreatedAt(dto.getCreatedAt());
         nextClassContent.setExternalUpdateAt(dto.getUpdatedAt());
-        nextClassContent.addLangList(langList);
         nextClassContent.setStatus(ContentStatus.HIDDEN);
+        nextClassContent.addLangList(langList);
 
         return nextClassContent;
+    }
+
+    public static Content createByYoutube(YoutubeContentDto dto, ArrayList<ContentLang> langList) {
+        Content youtubeContent = new Content();
+        youtubeContent.setExternalId(dto.getVideoId());
+        youtubeContent.setContentType(ContentType.YOUTUBE);
+        youtubeContent.setThumbnailUrl(dto.getThumbnailUrl());
+        youtubeContent.setViewCount(dto.getViewCount());
+        youtubeContent.setLikeCount(dto.getLikeCount());
+        youtubeContent.setCommentCount(dto.getCommentCount());
+        youtubeContent.setExternalCreatedAt(dto.getPublishedAt());
+        youtubeContent.setStatus(ContentStatus.HIDDEN);
+        youtubeContent.addLangList(langList);
+
+        return youtubeContent;
     }
 
 
@@ -88,6 +110,18 @@ public class Content extends BaseEntity {
         }
         if (!this.thumbnailUrl.equals(dto.getThumbnailUrl())) {
             this.thumbnailUrl = dto.getThumbnailUrl();
+        }
+    }
+
+    public void updateByYoutube(YoutubeContentDto dto) {
+        if (!this.viewCount.equals(dto.getViewCount())) {
+            this.viewCount = dto.getViewCount();
+        }
+        if (!this.likeCount.equals(dto.getLikeCount())) {
+            this.likeCount = dto.getLikeCount();
+        }
+        if (!this.commentCount.equals(dto.getCommentCount())) {
+            this.commentCount = dto.getCommentCount();
         }
     }
 }

@@ -27,13 +27,15 @@ public class ContentLang extends BaseEntity {
 
     private String contentName;
 
+    @Column(length = 2000)
     private String description;
 
 
-    public static ContentLang createContentLang(String langCode, String contentName) {
+    public static ContentLang createContentLang(String langCode, String contentName, String description) {
         ContentLang contentLang = new ContentLang();
         contentLang.setLangCode(langCode);
         contentLang.setContentName(contentName);
+        contentLang.setDescription(description);
 
         return contentLang;
     }

@@ -9,6 +9,8 @@ public class YoutubeContentDto {
 
     private String title;
 
+    private String description;
+
     private String thumbnailUrl;
 
     private String publishedAt;
@@ -18,6 +20,7 @@ public class YoutubeContentDto {
     private Long likeCount;
 
     private Long commentCount;
+
 }
 
 

@@ -62,7 +62,6 @@ public class NextClassBatchService {
 
         log.info("넥스트 클래스 총 페이지 수 : {}", totalPage);
 
-        // insert or update
         Integer insertCnt = null;
         Integer updateCnt = null;
         Integer totalCnt = null;
@@ -95,7 +94,7 @@ public class NextClassBatchService {
                             if (langCode.equals(LangCode.KO)) {
                                 contentName = dto.getContentName();
                             }
-                            contentLangList.add(ContentLang.createContentLang(langCode, contentName));
+                            contentLangList.add(ContentLang.createContentLang(langCode, contentName, null));
                         }
                         Content content = Content.createByNextClass(dto, contentLangList);
                         contentRepository.save(content);
@@ -120,10 +119,9 @@ public class NextClassBatchService {
             }
         }
 
-        // 이력 insert
+        // 이력 쌓기
         BatchHst batchHst = BatchHst.createBatchHst(ContentType.NEXT_CLASS, totalCnt, insertCnt, updateCnt);
         batchHstRepository.save(batchHst);
-
 
     }
 
