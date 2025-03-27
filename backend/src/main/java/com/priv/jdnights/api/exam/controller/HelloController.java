@@ -27,4 +27,9 @@ public class HelloController {
         batchJobExecutor.getYouTubeContentsInfo();
     }
 
+    @GetMapping(value = "/fs")
+    public void fsTest() {
+        batchJobExecutor.getFullScoreContentsInfo();
+    }
+
 }

@@ -157,7 +157,7 @@ public class YouTubeBatchService {
             BatchHst batchHst = BatchHst.createBatchHst(ContentType.YOUTUBE, totalCnt, insertCnt, updateCnt);
             batchHstRepository.save(batchHst);
 
-        } catch (LogicException e) {
+        } catch (Exception e) {
             log.error("유튜브 배치 실패", e.toString());
         }
     }
