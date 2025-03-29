@@ -152,6 +152,7 @@ public class YouTubeBatchService {
                     }
                 }
             }
+            // TODO 비공개, 삭제한 영상 delete나 비노출로?
 
             // 이력 쌓기
             BatchHst batchHst = BatchHst.createBatchHst(ContentType.YOUTUBE, totalCnt, insertCnt, updateCnt);

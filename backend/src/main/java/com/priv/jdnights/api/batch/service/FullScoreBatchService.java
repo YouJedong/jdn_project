@@ -1,16 +1,21 @@
 package com.priv.jdnights.api.batch.service;
 
+import com.priv.jdnights.api.batch.dto.FullScoreContentDto;
 import com.priv.jdnights.common.exception.LogicException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,6 +26,12 @@ public class FullScoreBatchService {
 
     @Value("${external.apis.fullscore.login-url}")
     private String FS_LOGIN_URL;
+
+    @Value("${external.apis.fullscore.stats-url}")
+    private String FS_STATS_URL;
+
+    @Value("${external.apis.fullscore.detail-url}")
+    private String FS_DETAIL_URL;
 
     @Value("${external.apis.fullscore.admin-id}")
     private String FS_ADMIN_ID;
@@ -41,30 +52,93 @@ public class FullScoreBatchService {
                     .userAgent("Mozilla/5.0")              // 크롤링 우회용
                     .timeout(5000)
                     .execute();
-            System.out.println("응답 코드: " + loginRes.statusCode());
-            System.out.println("응답 URL: " + loginRes.url());
-            System.out.println("응답 쿠키: " + loginRes.cookies());
-            System.out.println("응답 헤더: " + loginRes.headers());
-            System.out.println("본문 내용:\n" + loginRes.body());
+            
             // 세션 쿠키 저장
             Map<String, String> loginCookies = loginRes.cookies();
 
             // 로그인된 상태로 관리자 페이지 접근
-            Document doc = Jsoup.connect("https://www.fullscore.co.kr/mall/marketing/analy_prd.php?page=1")
+            Document doc = Jsoup.connect(FS_STATS_URL + "1")
                     .cookies(loginCookies)
                     .userAgent("Mozilla/5.0")
                     .get();
 
-            System.out.println(doc.title());
-            System.out.println(doc.html());
+            Elements pageLinks = doc.select("ul.pagination li");
+            Element lastLi = pageLinks.last();
+            String href = lastLi.selectFirst("a").attr("href");
+            String pageStr = href.replaceAll(".*page=(\\d+).*", "$1");
+            int totalPage = Integer.parseInt(pageStr);
+
+            System.out.println("마지막 페이지 번호: " + totalPage);
 
             // 목록(통계) 조회
+            if (totalPage > 0) {
+                List<FullScoreContentDto> contentDtoList = new ArrayList<>();
+
+                // 1페이지 데이터 추출
+                contentDtoList.addAll(this.getContentsStatsInfo(doc));
+
+                // 나머지 페이지 데이터 추출
+//                if (totalPage > 1) {
+//                    for(int i = 1; i < totalPage; i++) {
+//                        int pageNo = i + 1;
+//                        doc = Jsoup.connect(FS_STATS_URL + pageNo.toString())
+//                                .cookies(loginCookies)
+//                                .userAgent("Mozilla/5.0")
+//                                .get();
+//
+//                        contentDtoList.addAll(this.getContentsStatsInfo(doc));
+//                    }
+//                }
+
+                if (contentDtoList.size() > 0) {
+                    for (FullScoreContentDto contentDto : contentDtoList) {
+                        doc = Jsoup.connect(FS_DETAIL_URL + contentDto.getPrdcode())
+                                .cookies(loginCookies)
+                                .userAgent("Mozilla/5.0")
+                                .get();
+
+                        System.out.println("doc.body().html() = " + doc.body().html());
+                        break;
+                    }
+                }
+
+            }
+
+
 
             // 상세 조회
 
         } catch (Exception e) {
             log.error("풀스코어 배치 실패: " + e.toString());
+            e.printStackTrace();
         }
 
+    }
+
+    private List<FullScoreContentDto> getContentsStatsInfo(Document doc) {
+        Element contentsDiv = doc.selectFirst("#contents");
+        Element contentsTbody = contentsDiv.select("table").get(3).selectFirst("tbody");
+
+        List<FullScoreContentDto> contentDtolist = new ArrayList<>();
+        Elements allTrs = contentsTbody.select("tr");
+        for (int i = 3; i < allTrs.size(); i += 2) {
+            Element tr = allTrs.get(i);
+            Elements tds = tr.select("td");
+
+            String href = tds.get(2).selectFirst("a").attr("href");
+            String prdcode = href.replaceAll(".*prdcode=([0-9]+).*", "$1");
+            String title = tds.get(2).text();
+            String viewCount = tds.get(3).text();
+            String orderCount = tds.get(5).text();
+
+            FullScoreContentDto contentDto = new FullScoreContentDto();
+            contentDto.setPrdcode(prdcode);
+            contentDto.setTitle(title);
+            contentDto.setViewCount(Long.parseLong(viewCount));
+            contentDto.setOrderCount(Long.parseLong(orderCount));
+            contentDtolist.add(contentDto);
+        }
+
+        return contentDtolist;
     }
 }

@@ -118,6 +118,7 @@ public class NextClassBatchService {
                 }
             }
         }
+        // TODO 비노출, 삭제한 컨텐츠 비노출?
 
         // 이력 쌓기
         BatchHst batchHst = BatchHst.createBatchHst(ContentType.NEXT_CLASS, totalCnt, insertCnt, updateCnt);
