@@ -8,6 +8,8 @@ public class FullScoreContentDto {
     private String prdcode;
     private String title;
     private Long viewCount;
-    private Long orderCount;
+    private Integer orderCount;
+    private Integer price;
+    private String thumbnailUrl;
 
 }

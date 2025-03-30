@@ -1,9 +1,9 @@
 package com.priv.jdnights.api.contents.entity;
 
+import com.priv.jdnights.api.batch.dto.FullScoreContentDto;
 import com.priv.jdnights.api.batch.dto.NextClassContentDto;
 import com.priv.jdnights.api.batch.dto.YoutubeContentDto;
 import com.priv.jdnights.api.contents.enums.ContentStatus;
-import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -41,7 +41,7 @@ public class Content extends BaseEntity {
 
     private Integer price;
 
-    private Integer studentCount;
+    private Integer orderCount;
 
     private Long viewCount;
 
@@ -55,6 +55,8 @@ public class Content extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private ContentStatus status;
+
+
 
     private void addLangList(List<ContentLang> langList) {
         for (ContentLang contentLang : langList) {
@@ -70,7 +72,7 @@ public class Content extends BaseEntity {
         nextClassContent.setThumbnailUrl(dto.getThumbnailUrl());
         nextClassContent.setRating(dto.getRating());
         nextClassContent.setPrice(dto.getPrice());
-        nextClassContent.setStudentCount(dto.getStudentCount());
+        nextClassContent.setOrderCount(dto.getStudentCount());
         nextClassContent.setExternalCreatedAt(dto.getCreatedAt());
         nextClassContent.setExternalUpdateAt(dto.getUpdatedAt());
         nextClassContent.setStatus(ContentStatus.HIDDEN);
@@ -102,8 +104,8 @@ public class Content extends BaseEntity {
         if (!this.rating.equals(dto.getRating())) {
             this.rating = dto.getRating();
         }
-        if (!this.studentCount.equals(dto.getStudentCount())) {
-            this.studentCount = dto.getStudentCount();
+        if (!this.orderCount.equals(dto.getStudentCount())) {
+            this.orderCount = dto.getStudentCount();
         }
         if (!this.externalUpdateAt.equals(dto.getUpdatedAt())) {
             this.externalUpdateAt = dto.getUpdatedAt();
@@ -122,6 +124,29 @@ public class Content extends BaseEntity {
         }
         if (!this.commentCount.equals(dto.getCommentCount())) {
             this.commentCount = dto.getCommentCount();
+        }
+    }
+
+    public static Content createByFullScore(FullScoreContentDto dto, ArrayList<ContentLang> langList) {
+        Content fullScoreContent = new Content();
+        fullScoreContent.setExternalId(dto.getPrdcode());
+        fullScoreContent.setContentType(ContentType.FULL_SCORE);
+        fullScoreContent.setThumbnailUrl(dto.getThumbnailUrl());
+        fullScoreContent.setPrice(dto.getPrice());
+        fullScoreContent.setViewCount(dto.getViewCount());
+        fullScoreContent.setOrderCount(dto.getOrderCount());
+        fullScoreContent.setStatus(ContentStatus.HIDDEN);
+        fullScoreContent.addLangList(langList);
+
+        return fullScoreContent;
+    }
+
+    public void updateByFullScore(FullScoreContentDto dto) {
+        if (!this.viewCount.equals(dto.getViewCount())) {
+            this.viewCount = dto.getViewCount();
+        }
+        if (!this.orderCount.equals(dto.getOrderCount())) {
+            this.orderCount = dto.getOrderCount();
         }
     }
 }

@@ -123,7 +123,7 @@ public class YouTubeBatchService {
                 }
 
                 for (YoutubeContentDto dto : contentDtoList) {
-                    Content findContent = contentRepository.findByExternalId(dto.getVideoId());
+                    Content findContent = contentRepository.findByExternalIdAndContentType(dto.getVideoId(), ContentType.YOUTUBE);
 
                     if (findContent == null) { // insert
                         ArrayList<ContentLang> contentLangList = new ArrayList<>();
@@ -153,6 +153,7 @@ public class YouTubeBatchService {
                 }
             }
             // TODO 비공개, 삭제한 영상 delete나 비노출로?
+            // TODO 위키위키, 위키기타 콘텐츠도 들고와야함.. 근데 그럴꺼면 재생목록에 넣어놓는게..
 
             // 이력 쌓기
             BatchHst batchHst = BatchHst.createBatchHst(ContentType.YOUTUBE, totalCnt, insertCnt, updateCnt);
@@ -264,4 +265,6 @@ public class YouTubeBatchService {
         return detailMap;
     }
 
+    public void getYoutubeContentsInfoOfWiki() {
+    }
 }

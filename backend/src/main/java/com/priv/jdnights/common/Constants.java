@@ -15,8 +15,9 @@ public interface Constants {
 
     public class ContentType {
         public static final String NEXT_CLASS = "NC";
-
         public static final String YOUTUBE = "YT";
+        public static final String FULL_SCORE = "FS";
+
     }
 
 }

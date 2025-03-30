@@ -1,6 +1,12 @@
 package com.priv.jdnights.api.batch.service;
 
 import com.priv.jdnights.api.batch.dto.FullScoreContentDto;
+import com.priv.jdnights.api.batch.entity.BatchHst;
+import com.priv.jdnights.api.batch.repository.BatchHstRepository;
+import com.priv.jdnights.api.contents.entity.Content;
+import com.priv.jdnights.api.contents.entity.ContentLang;
+import com.priv.jdnights.api.contents.repository.ContentRepository;
+import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.exception.LogicException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +15,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +24,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.priv.jdnights.common.Constants.*;
 
 @Service
 @Transactional
@@ -39,8 +48,18 @@ public class FullScoreBatchService {
     @Value("${external.apis.fullscore.admin-pw}")
     private String FS_ADMIN_PW;
 
+    @Autowired
+    private ContentRepository contentRepository;
+
+    @Autowired
+    private BatchHstRepository batchHstRepository;
+
 
     public void getFullScoreContentsInfo() {
+
+        Integer insertCnt = null;
+        Integer updateCnt = null;
+        Integer totalCnt = null;
 
         // 로그인 후 쿠키 값 가져오기
         try {
@@ -71,6 +90,8 @@ public class FullScoreBatchService {
             System.out.println("마지막 페이지 번호: " + totalPage);
 
             // 목록(통계) 조회
+            insertCnt = 0;
+            updateCnt = 0;
             if (totalPage > 0) {
                 List<FullScoreContentDto> contentDtoList = new ArrayList<>();
 
@@ -78,35 +99,76 @@ public class FullScoreBatchService {
                 contentDtoList.addAll(this.getContentsStatsInfo(doc));
 
                 // 나머지 페이지 데이터 추출
-//                if (totalPage > 1) {
-//                    for(int i = 1; i < totalPage; i++) {
-//                        int pageNo = i + 1;
-//                        doc = Jsoup.connect(FS_STATS_URL + pageNo.toString())
-//                                .cookies(loginCookies)
-//                                .userAgent("Mozilla/5.0")
-//                                .get();
-//
-//                        contentDtoList.addAll(this.getContentsStatsInfo(doc));
-//                    }
-//                }
-
-                if (contentDtoList.size() > 0) {
-                    for (FullScoreContentDto contentDto : contentDtoList) {
-                        doc = Jsoup.connect(FS_DETAIL_URL + contentDto.getPrdcode())
+                if (totalPage > 1) {
+                    for(int i = 1; i < totalPage; i++) {
+                        int pageNo = i + 1;
+                        doc = Jsoup.connect(FS_STATS_URL + pageNo)
                                 .cookies(loginCookies)
                                 .userAgent("Mozilla/5.0")
                                 .get();
 
-                        System.out.println("doc.body().html() = " + doc.body().html());
-                        break;
+                        contentDtoList.addAll(this.getContentsStatsInfo(doc));
+                    }
+                }
+
+                totalCnt = contentDtoList.size();
+
+                if (contentDtoList.size() > 0) {
+
+                    for (FullScoreContentDto dto : contentDtoList) {
+                        Content findContent = contentRepository.findByExternalIdAndContentType(dto.getPrdcode(), ContentType.FULL_SCORE);
+
+                        if (findContent == null) {
+                            // 새로운 악보일 때 상세 정보 가져오기
+                            doc = Jsoup.connect(FS_DETAIL_URL + dto.getPrdcode())
+                                    .cookies(loginCookies)
+                                    .userAgent("Mozilla/5.0")
+                                    .get();
+
+                            String viewYn = doc.select("input[name=showset][value=Y]").hasAttr("checked") ? "Y" : "N";
+
+                            // 풀스코어 미노출 콘텐츠 저장 x
+                            if ("N".equals(viewYn)) {
+                                continue;
+                            }
+
+                            String artistName = doc.selectFirst("input[name=info_value1]").attr("value");
+                            String price = doc.selectFirst("input[name=sellprice]").attr("value");
+
+                            // 썸네일
+                            String thumbnailSrc = doc.selectFirst("img[name=prdimg1]").attr("src");
+                            String thumbnailUrl = "https://www.fullscore.co.kr/" + thumbnailSrc.replaceFirst("^\\.\\./\\.\\./", ""); // 상대경로 제거
+
+                            dto.setTitle(artistName + " - " + dto.getTitle());
+                            dto.setPrice(Integer.parseInt(price));
+                            dto.setThumbnailUrl(thumbnailUrl);
+
+                            ArrayList<ContentLang> contentLangList = new ArrayList<>();
+                            for (String langCode : LangCode.LANG_ARR) {
+                                // 한국어일때만 제목 넣기
+                                String contentName = null;
+                                if(langCode.equals(LangCode.KO)) {
+                                    contentName = dto.getTitle();
+                                }
+                                contentLangList.add(ContentLang.createContentLang(langCode, contentName, null));
+                            }
+                            Content content = Content.createByFullScore(dto, contentLangList);
+                            contentRepository.save(content);
+
+                            insertCnt++;
+                        } else {
+
+                            findContent.updateByFullScore(dto);
+
+                            updateCnt++;
+                        }
                     }
                 }
 
             }
 
-
-
-            // 상세 조회
+            BatchHst batchHst = BatchHst.createBatchHst(ContentType.FULL_SCORE, totalCnt, insertCnt, updateCnt);
+            batchHstRepository.save(batchHst);
 
         } catch (Exception e) {
             log.error("풀스코어 배치 실패: " + e.toString());
@@ -135,7 +197,7 @@ public class FullScoreBatchService {
             contentDto.setPrdcode(prdcode);
             contentDto.setTitle(title);
             contentDto.setViewCount(Long.parseLong(viewCount));
-            contentDto.setOrderCount(Long.parseLong(orderCount));
+            contentDto.setOrderCount(Integer.parseInt(orderCount));
             contentDtolist.add(contentDto);
         }
 

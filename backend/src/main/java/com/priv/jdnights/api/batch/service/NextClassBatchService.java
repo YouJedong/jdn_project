@@ -84,7 +84,7 @@ public class NextClassBatchService {
             updateCnt = 0;
             if (!contentDtoList.isEmpty()) {
                 for (NextClassContentDto dto : contentDtoList) {
-                    Content findContent = contentRepository.findByExternalId(dto.getNcId().toString());
+                    Content findContent = contentRepository.findByExternalIdAndContentType(dto.getNcId().toString(), ContentType.NEXT_CLASS);
 
                     if (findContent == null) { // insert
                         ArrayList<ContentLang> contentLangList = new ArrayList<>();

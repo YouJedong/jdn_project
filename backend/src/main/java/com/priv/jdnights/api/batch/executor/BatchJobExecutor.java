@@ -18,10 +18,15 @@ public class BatchJobExecutor {
     @Autowired
     private FullScoreBatchService fullScoreBatchService;
 
-    // 유튜브
+    // 유튜브(jdNignts 컨텐츠)
     public void getYouTubeContentsInfo() {
         youTubeBatchService.getYouTubeContentsInfo();
     }
+
+    // 유튜브(위키 컨텐츠)
+    public void getYoutubeContentsInfoOfWiki() {
+        youTubeBatchService.getYoutubeContentsInfoOfWiki();
+    };
 
     // 넥스트 클래스
 //    @Scheduled(cron = "* 27 23 * * ?")
