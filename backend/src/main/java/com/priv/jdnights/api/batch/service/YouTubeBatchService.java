@@ -65,6 +65,8 @@ public class YouTubeBatchService {
     @Value("${external.apis.youtube.key}")
     private String KEY;
 
+    @Value("${external.apis.youtube.wiki-list-id}")
+    private String WIKI_LIST_ID;
 
 
 
@@ -78,22 +80,28 @@ public class YouTubeBatchService {
         try {
             int test = 0;
             List<YoutubeContentDto> contentDtoList = new ArrayList<>();
-            do {
-                YoutubeListResultDto listResultDto = fetchYouTubeList(nextPageToken);
 
-                if (listResultDto == null || listResultDto.getYoutubeContentDtoList().isEmpty()) {
-                    break;
-                }
+            // JDnights + wiki 채널 JDnights 영상
+            String[] playlistIds = {PLAYLIST_ID, WIKI_LIST_ID};
 
-                nextPageToken = listResultDto.getNextPageToken();
-                contentDtoList.addAll(listResultDto.getYoutubeContentDtoList());
+            for (String playlistId : playlistIds) {
+                do {
+                    YoutubeListResultDto listResultDto = fetchYouTubeList(nextPageToken, playlistId);
 
-                test++;
-                if (test > 5) {
-                    break;
-                }
+                    if (listResultDto == null || listResultDto.getYoutubeContentDtoList().isEmpty()) {
+                        break;
+                    }
 
-            } while (nextPageToken != null && !nextPageToken.isEmpty());
+                    nextPageToken = listResultDto.getNextPageToken();
+                    contentDtoList.addAll(listResultDto.getYoutubeContentDtoList());
+
+                    test++;
+                    if (test > 30) {
+                        break;
+                    }
+
+                } while (nextPageToken != null && !nextPageToken.isEmpty());
+            }
 
             log.info("유튜브 총 콘텐츠 수 : {}", contentDtoList.size());
             totalCnt = contentDtoList.size();
@@ -164,9 +172,9 @@ public class YouTubeBatchService {
         }
     }
 
-    private YoutubeListResultDto fetchYouTubeList(String nextPageToken) {
+    private YoutubeListResultDto fetchYouTubeList(String nextPageToken, String playlistId) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(YT_BASE_URL)
-                .queryParam("playlistId", PLAYLIST_ID)
+                .queryParam("playlistId", playlistId)
                 .queryParam("key", KEY);
 
         if (nextPageToken != null && !nextPageToken.isEmpty()) {
@@ -265,6 +273,4 @@ public class YouTubeBatchService {
         return detailMap;
     }
 
-    public void getYoutubeContentsInfoOfWiki() {
-    }
 }

@@ -23,11 +23,6 @@ public class BatchJobExecutor {
         youTubeBatchService.getYouTubeContentsInfo();
     }
 
-    // 유튜브(위키 컨텐츠)
-    public void getYoutubeContentsInfoOfWiki() {
-        youTubeBatchService.getYoutubeContentsInfoOfWiki();
-    };
-
     // 넥스트 클래스
 //    @Scheduled(cron = "* 27 23 * * ?")
     public void getNextClassContentsInfo() {
