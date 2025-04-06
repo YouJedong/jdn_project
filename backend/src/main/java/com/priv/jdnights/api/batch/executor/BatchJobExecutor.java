@@ -18,7 +18,6 @@ public class BatchJobExecutor {
     @Autowired
     private FullScoreBatchService fullScoreBatchService;
 
-    // 유튜브(jdNignts 컨텐츠)
     public void getYouTubeContentsInfo() {
         youTubeBatchService.getYouTubeContentsInfo();
     }

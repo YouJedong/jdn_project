@@ -12,7 +12,7 @@ public class HelloController {
     @Autowired
     private BatchJobExecutor batchJobExecutor;
 
-    @GetMapping(value = "/hello")
+    @GetMapping(value = "/api/hello")
     public String hello() {
         return "hello!";
     }
