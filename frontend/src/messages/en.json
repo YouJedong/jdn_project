@@ -1,0 +1,9 @@
+{
+  "meta": {
+    "title": "My Music Content Site",
+    "description": "A site where I showcase my guitar performances, tutorials, and sheet music."
+  },
+  "home": {
+    "title": "Hello! This is the home page."
+  }
+}
