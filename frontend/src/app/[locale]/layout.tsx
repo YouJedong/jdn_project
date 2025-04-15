@@ -1,24 +1,19 @@
 import {ReactNode} from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import {setRequestLocale, getTranslations} from 'next-intl/server';
+import {getTranslations} from 'next-intl/server';
 
 type Props = {
   children: ReactNode;
-  params: {
-    locale: string;
-  };
 };
 
-export default async function LocaleLayout({children, params: {locale}}: Props) {
-  setRequestLocale(locale);
-
-  const t = await getTranslations({locale});
+export default async function LocaleLayout({ children }: Props) {
+  const t = await getTranslations();
   const title = t('meta.title');
   const description = t('meta.description');
 
   return (
-    <html lang={locale}>
+    <html lang='ko'>
       <head>
         <title>{title}</title>
         <meta name="description" content={description} />
