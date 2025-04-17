@@ -1,3 +1,4 @@
+import '@/app/globals.css';
 import {ReactNode} from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -20,7 +21,7 @@ export default async function LocaleLayout({ children }: Props) {
       </head>
       <body>
         <Header />
-        <main>{children}</main>
+        <main className=''>{children}</main>
         <Footer />
       </body>
     </html>
