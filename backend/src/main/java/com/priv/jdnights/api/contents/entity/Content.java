@@ -3,6 +3,7 @@ package com.priv.jdnights.api.contents.entity;
 import com.priv.jdnights.api.batch.dto.FullScoreContentDto;
 import com.priv.jdnights.api.batch.dto.NextClassContentDto;
 import com.priv.jdnights.api.batch.dto.YoutubeContentDto;
+import com.priv.jdnights.api.contents.dto.HomeContentDto;
 import com.priv.jdnights.api.contents.enums.ContentStatus;
 import com.priv.jdnights.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -149,4 +150,6 @@ public class Content extends BaseEntity {
             this.orderCount = dto.getOrderCount();
         }
     }
+
+
 }

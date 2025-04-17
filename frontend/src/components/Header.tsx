@@ -34,8 +34,6 @@ export default function Header() {
       </header>
       <nav className="h-12 flex justify-center items-center gap-14 border-b border-gray-200">
         {navItems.map(({ href, label }) => {
-          console.log(pathname);
-          console.log(locale);
           const isActive = pathname === href;
 
           return (
