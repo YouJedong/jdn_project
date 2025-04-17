@@ -5,5 +5,18 @@
   },
   "home": {
     "title": "안녕하세요! 여기는 홈입니다."
+  },
+  "header": {
+    "lang" : {
+      "ko": "한국어",
+      "en": "영어" 
+    },
+    "nav": {
+      "home": "Home",
+      "video": "영상",
+      "lectures": "강의",
+      "scores" : "악보",
+      "donate" : "후원"
+    }
   }
 }

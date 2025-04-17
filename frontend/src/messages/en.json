@@ -5,5 +5,18 @@
   },
   "home": {
     "title": "Hello! This is the home page."
+  },
+  "header": {
+    "lang" : {
+      "ko": "Korean",
+      "en": "English" 
+    },
+    "nav": {
+      "home": "Home",
+      "video": "Video",
+      "lectures": "Lectures",
+      "scores" : "Scores",
+      "donate" : "Donate"
+    }
   }
 }
