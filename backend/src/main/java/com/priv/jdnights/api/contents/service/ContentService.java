@@ -27,9 +27,6 @@ public class ContentService {
                 .map(this::toYoutubeDto)
                 .toList();
 
-        for (HomeContentDto youtubeContent : youtubeContents) {
-            System.out.println("youtubeContent = " + youtubeContent);
-        }
         TestDto testDto = new TestDto(youtubeContents);
         
         return new ResultMap(testDto);

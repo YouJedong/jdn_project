@@ -17,10 +17,10 @@ import java.util.List;
 import static com.priv.jdnights.common.Constants.*;
 
 @Entity
-@Getter
-@Setter
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "content_type")
 @NoArgsConstructor
-public class Content extends BaseEntity {
+public abstract class Content extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,29 +30,10 @@ public class Content extends BaseEntity {
     @Column(nullable = false)
     private String externalId;
 
-    @Column(nullable = false)
-    private String contentType;
-
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContentLang> contentLangList = new ArrayList<>();
 
     private String thumbnailUrl;
-
-    private Integer rating;
-
-    private Integer price;
-
-    private Integer orderCount;
-
-    private Long viewCount;
-
-    private Long likeCount;
-
-    private Long commentCount;
-
-    private String externalCreatedAt;
-
-    private String externalUpdateAt;
 
     @Enumerated(EnumType.STRING)
     private ContentStatus status;
