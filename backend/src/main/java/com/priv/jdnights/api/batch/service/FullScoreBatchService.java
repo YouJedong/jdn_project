@@ -5,6 +5,7 @@ import com.priv.jdnights.api.batch.entity.BatchHst;
 import com.priv.jdnights.api.batch.repository.BatchHstRepository;
 import com.priv.jdnights.api.contents.entity.Content;
 import com.priv.jdnights.api.contents.entity.ContentLang;
+import com.priv.jdnights.api.contents.entity.FullScoreContent;
 import com.priv.jdnights.api.contents.repository.ContentRepository;
 import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.exception.LogicException;
@@ -116,7 +117,7 @@ public class FullScoreBatchService {
                 if (contentDtoList.size() > 0) {
 
                     for (FullScoreContentDto dto : contentDtoList) {
-                        Content findContent = contentRepository.findByExternalIdAndContentType(dto.getPrdcode(), ContentType.FULL_SCORE);
+                        FullScoreContent findContent = (FullScoreContent) contentRepository.findByExternalIdAndContentType(dto.getPrdcode(), ContentType.FULL_SCORE);
 
                         if (findContent == null) {
                             // 새로운 악보일 때 상세 정보 가져오기
@@ -152,7 +153,7 @@ public class FullScoreBatchService {
                                 }
                                 contentLangList.add(ContentLang.createContentLang(langCode, contentName, null));
                             }
-                            Content content = Content.createByFullScore(dto, contentLangList);
+                            FullScoreContent content = FullScoreContent.createByFullScore(dto, contentLangList);
                             contentRepository.save(content);
 
                             insertCnt++;

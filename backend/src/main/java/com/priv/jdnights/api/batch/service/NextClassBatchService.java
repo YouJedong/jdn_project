@@ -7,6 +7,7 @@ import com.priv.jdnights.api.batch.entity.BatchHst;
 import com.priv.jdnights.api.batch.repository.BatchHstRepository;
 import com.priv.jdnights.api.contents.entity.Content;
 import com.priv.jdnights.api.contents.entity.ContentLang;
+import com.priv.jdnights.api.contents.entity.NextClassContent;
 import com.priv.jdnights.api.contents.repository.ContentLangRepository;
 import com.priv.jdnights.api.contents.repository.ContentRepository;
 import com.priv.jdnights.common.Constants;
@@ -84,7 +85,7 @@ public class NextClassBatchService {
             updateCnt = 0;
             if (!contentDtoList.isEmpty()) {
                 for (NextClassContentDto dto : contentDtoList) {
-                    Content findContent = contentRepository.findByExternalIdAndContentType(dto.getNcId().toString(), ContentType.NEXT_CLASS);
+                    NextClassContent findContent = (NextClassContent) contentRepository.findByExternalIdAndContentType(dto.getNcId().toString(), ContentType.NEXT_CLASS);
 
                     if (findContent == null) { // insert
                         ArrayList<ContentLang> contentLangList = new ArrayList<>();
@@ -96,7 +97,7 @@ public class NextClassBatchService {
                             }
                             contentLangList.add(ContentLang.createContentLang(langCode, contentName, null));
                         }
-                        Content content = Content.createByNextClass(dto, contentLangList);
+                        NextClassContent content = NextClassContent.createByNextClass(dto, contentLangList);
                         contentRepository.save(content);
 
                         // 등록 카운트

@@ -12,6 +12,7 @@ import com.priv.jdnights.api.batch.entity.BatchHst;
 import com.priv.jdnights.api.batch.repository.BatchHstRepository;
 import com.priv.jdnights.api.contents.entity.Content;
 import com.priv.jdnights.api.contents.entity.ContentLang;
+import com.priv.jdnights.api.contents.entity.YoutubeContent;
 import com.priv.jdnights.api.contents.repository.ContentRepository;
 import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.exception.LogicException;
@@ -131,7 +132,7 @@ public class YouTubeBatchService {
                 }
 
                 for (YoutubeContentDto dto : contentDtoList) {
-                    Content findContent = contentRepository.findByExternalIdAndContentType(dto.getVideoId(), ContentType.YOUTUBE);
+                    YoutubeContent findContent = (YoutubeContent) contentRepository.findByExternalIdAndContentType(dto.getVideoId(), ContentType.YOUTUBE);
 
                     if (findContent == null) { // insert
                         ArrayList<ContentLang> contentLangList = new ArrayList<>();
@@ -145,7 +146,7 @@ public class YouTubeBatchService {
                             }
                             contentLangList.add(ContentLang.createContentLang(langCode, contentName, description));
                         }
-                        Content content = Content.createByYoutube(dto, contentLangList);
+                        YoutubeContent content = YoutubeContent.createByYoutube(dto, contentLangList);
                         contentRepository.save(content);
 
                         // 등록 카운트
