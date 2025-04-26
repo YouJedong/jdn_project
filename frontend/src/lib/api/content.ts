@@ -1,27 +1,23 @@
-import { HomeContent } from '@/types/content';
-
-type ResultMap<T> = {
-  code: string;
-  data: T;
-};
+import { ApiResponse } from '@/types/common';
+import { PopularYoutubeContentDto } from '@/types/content'
 
 
-export async function getHomeContent(): Promise<HomeContent> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/content/home`, {
-    next: { revalidate: 60 }, // or cache: 'no-store'
+export async function getPopularYoutubeContents(videoType: string): Promise<PopularYoutubeContentDto[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt/popular/${videoType}`, {
+    next: { revalidate: 60 }, // 60초 동안 캐시
   });
 
   if (!res.ok) {
-    throw new Error('홈 콘텐츠 불러오기 실패');
+    throw new Error('인기 유튜브 콘텐츠 불러오기 실패');
   }
 
-  const result: ResultMap<HomeContent> = await res.json();
+  const result: ApiResponse<PopularYoutubeContentDto[]> = await res.json();
 
   if (result.code !== '200') {
-    throw new Error('홈 콘텐츠 응답 코드 오류');
+    throw new Error(`API 응답 코드 오류: ${result.message}`);
   }
 
-  console.log("머닝",result.data);
+  console.log(result.data);
 
-  return result.data;
+  return result.data; // 바로 DTO 리스트 반환
 }

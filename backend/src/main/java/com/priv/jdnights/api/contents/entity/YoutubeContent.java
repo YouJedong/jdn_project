@@ -2,9 +2,12 @@ package com.priv.jdnights.api.contents.entity;
 
 import com.priv.jdnights.api.batch.dto.YoutubeContentDto;
 import com.priv.jdnights.api.contents.enums.ContentStatus;
+import com.priv.jdnights.api.contents.enums.VideoType;
 import com.priv.jdnights.common.Constants;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +27,9 @@ public class YoutubeContent extends Content {
     private Long viewCount;
 
     private String externalCreatedAt;
+
+    @Enumerated(EnumType.STRING)
+    private VideoType videoType;
 
     public static YoutubeContent createByYoutube(YoutubeContentDto dto, ArrayList<ContentLang> langList) {
         YoutubeContent youtubeContent = new YoutubeContent();

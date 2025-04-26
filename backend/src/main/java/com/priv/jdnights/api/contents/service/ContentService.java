@@ -2,9 +2,14 @@ package com.priv.jdnights.api.contents.service;
 
 import com.priv.jdnights.api.batch.dto.YoutubeContentDto;
 import com.priv.jdnights.api.contents.dto.HomeContentDto;
+import com.priv.jdnights.api.contents.dto.PopularYoutubeContentDto;
 import com.priv.jdnights.api.contents.dto.TestDto;
 import com.priv.jdnights.api.contents.entity.Content;
+import com.priv.jdnights.api.contents.entity.YoutubeContent;
+import com.priv.jdnights.api.contents.enums.VideoType;
+import com.priv.jdnights.api.contents.mapper.ContentMapper;
 import com.priv.jdnights.api.contents.repository.ContentRepository;
+import com.priv.jdnights.api.contents.repository.YoutubeContentRepository;
 import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.dto.ResultMap;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +25,20 @@ public class ContentService {
 
     private final ContentRepository contentRepository;
 
+    private final ContentMapper contentMapper;
+
+    private final YoutubeContentRepository youtubeContentRepository;
+
     public ResultMap getHomeContents() {
 
-        List<HomeContentDto> youtubeContents = contentRepository.findByContentType(Constants.ContentType.YOUTUBE)
-                .stream()
-                .map(this::toYoutubeDto)
-                .toList();
+//        List<HomeContentDto> youtubeContents = youtubeContentRepository.findByContentType(Constants.ContentType.YOUTUBE)
+//                .stream()
+//                .map(this::toYoutubeDto)
+//                .toList();
 
-        TestDto testDto = new TestDto(youtubeContents);
+//        TestDto testDto = new TestDto(youtubeContents);
         
-        return new ResultMap(testDto);
+        return new ResultMap();
     }
 
     private HomeContentDto toYoutubeDto(Content content) {
@@ -37,5 +46,10 @@ public class ContentService {
                 content.getId(),
                 content.getThumbnailUrl()
         );
+    }
+
+    public List<PopularYoutubeContentDto> getPopularYoutubeContents(VideoType videoType) {
+        List<YoutubeContent> contents = youtubeContentRepository.findTop8ByVideoTypeOrderByViewCountDesc(videoType);
+        return contentMapper.toPopularDtoList(contents);
     }
 }
