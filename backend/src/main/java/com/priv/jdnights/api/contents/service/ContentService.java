@@ -13,6 +13,7 @@ import com.priv.jdnights.api.contents.repository.YoutubeContentRepository;
 import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.dto.ResultMap;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +50,11 @@ public class ContentService {
     }
 
     public List<PopularYoutubeContentDto> getPopularYoutubeContents(VideoType videoType) {
-        List<YoutubeContent> contents = youtubeContentRepository.findTop8ByVideoTypeOrderByViewCountDesc(videoType);
+
+        List<YoutubeContent> contents = youtubeContentRepository.findPopularYoutubeContents(videoType, Constants.LangCode.KO, Pageable.ofSize(8));
+
+        System.out.println("contents = " + contents);
+
         return contentMapper.toPopularDtoList(contents);
     }
 }

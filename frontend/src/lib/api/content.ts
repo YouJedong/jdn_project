@@ -3,7 +3,11 @@ import { PopularYoutubeContentDto } from '@/types/content'
 
 
 export async function getPopularYoutubeContents(videoType: string): Promise<PopularYoutubeContentDto[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt/popular/${videoType}`, {
+  // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt/popular/${videoType}`, {
+  //   next: { revalidate: 60 }, // 60초 동안 캐시
+  // });
+
+  const res = await fetch(`http://localhost:8080/api/content/yt/popular/${videoType}`, {
     next: { revalidate: 60 }, // 60초 동안 캐시
   });
 
