@@ -51,10 +51,10 @@ public class ContentService {
 
     public List<PopularYoutubeContentDto> getPopularYoutubeContents(VideoType videoType) {
 
-        List<YoutubeContent> contents = youtubeContentRepository.findPopularYoutubeContents(videoType, Constants.LangCode.KO, Pageable.ofSize(8));
+        List<PopularYoutubeContentDto> contents = youtubeContentRepository.findPopularYoutubeContents(videoType, Constants.LangCode.KO, Pageable.ofSize(8));
 
         System.out.println("contents = " + contents);
 
-        return contentMapper.toPopularDtoList(contents);
+        return contents;
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ContentMapper {
 
-    List<PopularYoutubeContentDto> toPopularDtoList(List<YoutubeContent> contents);
+
 }

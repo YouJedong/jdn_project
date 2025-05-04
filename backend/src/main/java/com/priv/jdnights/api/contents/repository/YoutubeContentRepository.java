@@ -9,17 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface YoutubeContentRepository extends JpaRepository<YoutubeContent, Long> {
+public interface YoutubeContentRepository extends JpaRepository<YoutubeContent, Long>, YoutubeContentQueryRepository {
 
-    YoutubeContent findByContentType(String contentType);
-
-    @Query("""
-            SELECT      y
-            FROM        YoutubeContent y
-            JOIN FETCH  y.contentLangList cl
-            WHERE       y.videoType = :videoType
-            AND         cl.langCode = :langCode
-            ORDER BY    y.viewCount DESC
-            """)
-    List<YoutubeContent> findPopularYoutubeContents(VideoType videoType, String langCode, Pageable pageable);
 }
