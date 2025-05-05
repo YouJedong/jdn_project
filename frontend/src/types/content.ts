@@ -1,6 +1,6 @@
 export interface PopularYoutubeContentDto {
-  content_id: number;
-  name: string;
+  id: number;
+  contentName: any;
   thumbnailUrl: string;
   likeCount: number;
   viewCount: number;

@@ -12,6 +12,15 @@ const nextConfig = withNextIntl({
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        pathname: '/vi/**',
+      },
+    ],
+  },
 });
 
 module.exports = nextConfig
