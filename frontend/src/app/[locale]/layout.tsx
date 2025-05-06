@@ -24,7 +24,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   });
 
   return (
-    <html lang='ko'>
+    <html lang={locale}>
       <head>
         <title>{title}</title>
         <meta name="description" content={description} />

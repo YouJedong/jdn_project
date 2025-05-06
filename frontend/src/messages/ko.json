@@ -5,7 +5,9 @@
   },
   "home": {
     "title": "안녕하세요! 여기는 홈입니다.",
-    "pupularVideo": "인기 유튜브 영상"
+    "pupularVideo": "인기 유튜브 영상",
+    "pupularLecture": "인기 강의",
+    "pupularSheet": "인기 악보"
   },
   "header": {
     "lang" : {

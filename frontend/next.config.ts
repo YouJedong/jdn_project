@@ -19,6 +19,12 @@ const nextConfig = withNextIntl({
         hostname: 'i.ytimg.com',
         pathname: '/vi/**',
       },
+      {
+        //  https://next-class.s3.ap-northeast-2.amazonaws.com/production/images/20231003/140231191.png
+        protocol: 'https',
+        hostname: 'next-class.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/production/images/**',
+      }
     ],
   },
 });
