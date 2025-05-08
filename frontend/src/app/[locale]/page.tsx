@@ -97,8 +97,10 @@ export default async function HomePage({params}: {params: { locale: string }}) {
                     {item.contentName}
                   </div>
                   <p className="text-sm text-gray-500 mt-2 flex items-center gap-2">
-                    <Image src="/like.png" alt="평점" width={15} height={15} />{item.rating.toLocaleString()}
-                    <Image src="/eye.png" alt="주문수" width={16} height={16} />{item.orderCount.toLocaleString()}
+                    <Image src="/star.png" alt="평점" width={14} height={14} />
+                    {(item.rating / 2).toLocaleString()}
+                    <Image src="/person.png" alt="주문수" width={16} height={16} />
+                    {item.orderCount.toLocaleString()} 
                   </p>
                 </div>
               </div>
@@ -126,8 +128,8 @@ export default async function HomePage({params}: {params: { locale: string }}) {
                     {item.contentName}
                   </div>
                   <p className="text-sm text-gray-500 mt-2 flex items-center gap-2">
-                    <Image src="/like.png" alt="좋아요" width={15} height={15} />{item.likeCount.toLocaleString()}
-                    <Image src="/eye.png" alt="조회수" width={16} height={16} />{item.viewCount.toLocaleString()}
+                    <Image src="/eye.png" alt="조회수" width={16} height={16} />
+                    {item.viewCount.toLocaleString()}
                   </p>
                 </div>
               </div>

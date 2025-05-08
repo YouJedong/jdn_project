@@ -1,15 +1,13 @@
 package com.priv.jdnights.api.contents.service;
 
 import com.priv.jdnights.api.batch.dto.YoutubeContentDto;
-import com.priv.jdnights.api.contents.dto.HomeContentDto;
-import com.priv.jdnights.api.contents.dto.PopularNextClassContentDto;
-import com.priv.jdnights.api.contents.dto.PopularYoutubeContentDto;
-import com.priv.jdnights.api.contents.dto.TestDto;
+import com.priv.jdnights.api.contents.dto.*;
 import com.priv.jdnights.api.contents.entity.Content;
 import com.priv.jdnights.api.contents.entity.YoutubeContent;
 import com.priv.jdnights.api.contents.enums.VideoType;
 import com.priv.jdnights.api.contents.mapper.ContentMapper;
 import com.priv.jdnights.api.contents.repository.ContentRepository;
+import com.priv.jdnights.api.contents.repository.FullScoreContentRepository;
 import com.priv.jdnights.api.contents.repository.NextClassContentRepository;
 import com.priv.jdnights.api.contents.repository.YoutubeContentRepository;
 import com.priv.jdnights.common.Constants;
@@ -33,6 +31,8 @@ public class ContentService {
     private final YoutubeContentRepository youtubeContentRepository;
     private final NextClassContentRepository nextClassContentRepository;
 
+    private final FullScoreContentRepository fullScoreContentRepository;
+
     public List<PopularYoutubeContentDto> getPopularYoutubeContents(VideoType videoType) {
         List<PopularYoutubeContentDto> contents = youtubeContentRepository.findPopularYoutubeContents(videoType, Constants.LangCode.KO, Pageable.ofSize(8));
         System.out.println("contents = " + contents);
@@ -43,4 +43,10 @@ public class ContentService {
         List<PopularNextClassContentDto> contents = nextClassContentRepository.findPopularContents(Constants.LangCode.KO, Pageable.ofSize(8));
         return contents;
     }
+
+    public List<PopularFullScoreContentDto> getPopularFullScoreContents() {
+        List<PopularFullScoreContentDto> contents = fullScoreContentRepository.findPopularContents(Constants.LangCode.KO, Pageable.ofSize(8));
+        return contents;
+    }
+
 }

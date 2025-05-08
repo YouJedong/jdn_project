@@ -1,5 +1,6 @@
 package com.priv.jdnights.api.contents.controller;
 
+import com.priv.jdnights.api.contents.dto.PopularFullScoreContentDto;
 import com.priv.jdnights.api.contents.dto.PopularNextClassContentDto;
 import com.priv.jdnights.api.contents.dto.PopularYoutubeContentDto;
 import com.priv.jdnights.api.contents.enums.VideoType;
@@ -29,6 +30,11 @@ public class ContentRestController {
     @GetMapping("/nc/popular")
     public ApiResponse<List<PopularNextClassContentDto>> getPopularNextClassContents() {
         return new ApiResponse<>(contentService.getPopularNextClassContents());
+    }
+
+    @GetMapping("/fs/popular")
+    public ApiResponse<List<PopularFullScoreContentDto>> getPopularFullScoreContents() {
+        return new ApiResponse<>(contentService.getPopularFullScoreContents());
     }
 }
 

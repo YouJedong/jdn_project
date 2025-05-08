@@ -12,4 +12,9 @@ export interface PopularNextClassContentDto {
   rating: number;
   orderCount: number;
 }
-
+export interface PopularFullScoreContentDto {
+  id: number;
+  contentName: any;
+  thumbnailUrl: string;
+  viewCount: number;
+}

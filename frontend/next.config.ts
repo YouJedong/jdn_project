@@ -24,6 +24,12 @@ const nextConfig = withNextIntl({
         protocol: 'https',
         hostname: 'next-class.s3.ap-northeast-2.amazonaws.com',
         pathname: '/production/images/**',
+      },
+      {
+        // https://www.fullscore.co.kr/data/prdimg/2203310008_R.jpg
+        protocol: 'https',
+        hostname: 'www.fullscore.co.kr',
+        pathname: '/data/**'
       }
     ],
   },
