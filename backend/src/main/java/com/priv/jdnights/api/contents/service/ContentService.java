@@ -11,6 +11,7 @@ import com.priv.jdnights.api.contents.repository.FullScoreContentRepository;
 import com.priv.jdnights.api.contents.repository.NextClassContentRepository;
 import com.priv.jdnights.api.contents.repository.YoutubeContentRepository;
 import com.priv.jdnights.common.Constants;
+import com.priv.jdnights.common.config.LangContext;
 import com.priv.jdnights.common.dto.ResultMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,7 @@ public class ContentService {
     private final FullScoreContentRepository fullScoreContentRepository;
 
     public List<PopularYoutubeContentDto> getPopularYoutubeContents(VideoType videoType) {
-        List<PopularYoutubeContentDto> contents = youtubeContentRepository.findPopularYoutubeContents(videoType, Constants.LangCode.KO, Pageable.ofSize(8));
+        List<PopularYoutubeContentDto> contents = youtubeContentRepository.findPopularYoutubeContents(videoType, LangContext.get(), Pageable.ofSize(8));
         System.out.println("contents = " + contents);
         return contents;
     }

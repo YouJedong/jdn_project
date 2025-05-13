@@ -1,9 +1,10 @@
 import { ApiResponse } from '@/types/common';
 import { PopularYoutubeContentDto, PopularNextClassContentDto, PopularFullScoreContentDto } from '@/types/content'
+import { fetchWithLangServer } from '@/lib/common/fetchWithLangServer'
 
 
 export async function getPopularYoutubeContents(videoType: string): Promise<PopularYoutubeContentDto[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt/popular/${videoType}`, {
+  const res = await fetchWithLangServer(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt/popular/${videoType}`, {
     next: { revalidate: 60 }, // 60초 동안 캐시
   });
 
@@ -21,7 +22,7 @@ export async function getPopularYoutubeContents(videoType: string): Promise<Popu
 }
 
 export async function getPopularNextclassContents(): Promise<PopularNextClassContentDto[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/content/nc/popular`, {
+  const res = await fetchWithLangServer(`${process.env.NEXT_PUBLIC_API_URL}/api/content/nc/popular`, {
     next: { revalidate: 60 }, // 60초 동안 캐시
   });
 
@@ -39,7 +40,7 @@ export async function getPopularNextclassContents(): Promise<PopularNextClassCon
 }
 
 export async function getPopularFullscoreContents(): Promise<PopularFullScoreContentDto[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/content/fs/popular`, {
+  const res = await fetchWithLangServer(`${process.env.NEXT_PUBLIC_API_URL}/api/content/fs/popular`, {
     next: { revalidate: 60 }, // 60초 동안 캐시
   });
 

@@ -8,10 +8,7 @@ import com.priv.jdnights.api.contents.service.ContentService;
 import com.priv.jdnights.common.dto.ApiResponse;
 import com.priv.jdnights.common.dto.ResultMap;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
