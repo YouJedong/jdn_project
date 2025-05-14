@@ -36,17 +36,16 @@ public class ContentService {
 
     public List<PopularYoutubeContentDto> getPopularYoutubeContents(VideoType videoType) {
         List<PopularYoutubeContentDto> contents = youtubeContentRepository.findPopularYoutubeContents(videoType, LangContext.get(), Pageable.ofSize(8));
-        System.out.println("contents = " + contents);
         return contents;
     }
 
     public List<PopularNextClassContentDto> getPopularNextClassContents() {
-        List<PopularNextClassContentDto> contents = nextClassContentRepository.findPopularContents(Constants.LangCode.KO, Pageable.ofSize(8));
+        List<PopularNextClassContentDto> contents = nextClassContentRepository.findPopularContents(LangContext.get(), Pageable.ofSize(8));
         return contents;
     }
 
     public List<PopularFullScoreContentDto> getPopularFullScoreContents() {
-        List<PopularFullScoreContentDto> contents = fullScoreContentRepository.findPopularContents(Constants.LangCode.KO, Pageable.ofSize(8));
+        List<PopularFullScoreContentDto> contents = fullScoreContentRepository.findPopularContents(LangContext.get(), Pageable.ofSize(8));
         return contents;
     }
 
