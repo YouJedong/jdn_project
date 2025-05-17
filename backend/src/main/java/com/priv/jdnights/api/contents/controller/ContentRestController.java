@@ -1,13 +1,17 @@
 package com.priv.jdnights.api.contents.controller;
 
+import com.priv.jdnights.api.batch.dto.YoutubeContentDto;
 import com.priv.jdnights.api.contents.dto.PopularFullScoreContentDto;
 import com.priv.jdnights.api.contents.dto.PopularNextClassContentDto;
 import com.priv.jdnights.api.contents.dto.PopularYoutubeContentDto;
+import com.priv.jdnights.api.contents.dto.YoutubeContentListDto;
 import com.priv.jdnights.api.contents.enums.VideoType;
+import com.priv.jdnights.api.contents.repository.YoutubeContentSearchDto;
 import com.priv.jdnights.api.contents.service.ContentService;
 import com.priv.jdnights.common.dto.ApiResponse;
 import com.priv.jdnights.common.dto.ResultMap;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +36,11 @@ public class ContentRestController {
     @GetMapping("/fs/popular")
     public ApiResponse<List<PopularFullScoreContentDto>> getPopularFullScoreContents() {
         return new ApiResponse<>(contentService.getPopularFullScoreContents());
+    }
+
+    @GetMapping("/yt")
+    public ApiResponse<List<YoutubeContentListDto>> getYoutubeContents(YoutubeContentSearchDto searchDto, Pageable pageable) {
+        return new ApiResponse<>(contentService.getYoutubeContents(searchDto, pageable));
     }
 }
 

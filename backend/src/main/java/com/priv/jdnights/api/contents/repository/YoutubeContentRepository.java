@@ -1,5 +1,6 @@
 package com.priv.jdnights.api.contents.repository;
 
+import com.priv.jdnights.api.contents.dto.YoutubeContentListDto;
 import com.priv.jdnights.api.contents.entity.YoutubeContent;
 import com.priv.jdnights.api.contents.enums.VideoType;
 import com.priv.jdnights.common.Constants;

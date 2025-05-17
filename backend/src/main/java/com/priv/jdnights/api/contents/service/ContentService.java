@@ -6,10 +6,7 @@ import com.priv.jdnights.api.contents.entity.Content;
 import com.priv.jdnights.api.contents.entity.YoutubeContent;
 import com.priv.jdnights.api.contents.enums.VideoType;
 import com.priv.jdnights.api.contents.mapper.ContentMapper;
-import com.priv.jdnights.api.contents.repository.ContentRepository;
-import com.priv.jdnights.api.contents.repository.FullScoreContentRepository;
-import com.priv.jdnights.api.contents.repository.NextClassContentRepository;
-import com.priv.jdnights.api.contents.repository.YoutubeContentRepository;
+import com.priv.jdnights.api.contents.repository.*;
 import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.config.LangContext;
 import com.priv.jdnights.common.dto.ResultMap;
@@ -49,4 +46,11 @@ public class ContentService {
         return contents;
     }
 
+    public List<YoutubeContentListDto> getYoutubeContents(YoutubeContentSearchDto searchDto, Pageable pageable) {
+        searchDto.setLangCode(LangContext.get());
+
+        List<YoutubeContentListDto> contents = youtubeContentRepository.findContents(searchDto, pageable);
+
+        return contents;
+    }
 }

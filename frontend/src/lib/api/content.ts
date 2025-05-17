@@ -1,7 +1,11 @@
 import { ApiResponse } from '@/types/common';
-import { PopularYoutubeContent, PopularNextClassContent, PopularFullScoreContent } from '@/types/content'
+import { PopularYoutubeContent, PopularNextClassContent, PopularFullScoreContent, YoutubeContent } from '@/types/content'
 import { fetchWithLangServer } from '@/lib/common/fetchWithLangServer'
 
+export interface YoutubeSearchParams {
+  page?: string;
+  size?: string;
+}
 
 export async function getPopularYoutubeContents(videoType: string): Promise<PopularYoutubeContent[]> {
   const res = await fetchWithLangServer(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt/popular/${videoType}`, {
@@ -57,3 +61,29 @@ export async function getPopularFullscoreContents(): Promise<PopularFullScoreCon
   return result.data; // 바로 DTO 리스트 반환
 }
 
+export async function getYoutubeContents(params: YoutubeSearchParams) : Promise<YoutubeContent[]> {
+  const page = params.page ?? '0';
+  const size = params.size ?? '10';
+
+  const query = new URLSearchParams({
+    page,
+    size,
+  });
+
+  const res = await fetchWithLangServer(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt?${query.toString()}`, {
+    next: { revalidate: 60 }
+  })
+
+  if (!res.ok) {
+    throw new Error('영상 목록 불러오기 실패');
+  }
+
+  const result: ApiResponse<YoutubeContent[]> = await res.json();
+
+  if (result.code !== '200') {
+    throw new Error(`API 응답 코드 오류: ${result.message}`);
+  }
+
+  console.log(result.data);
+  return result.data;
+}

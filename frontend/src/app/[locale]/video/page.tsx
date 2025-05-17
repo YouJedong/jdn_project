@@ -3,17 +3,14 @@ import { getYoutubeContents } from '@/lib/api/content'
 
 interface Props {
   searchParams: {
-    page?: number;
-    size?: number;
+    page?: string;
+    size?: string;
   }
   
 }
 
 
 export default async function VideoListPage({ searchParams } : Props) {
-  const page = searchParams.page ?? 1;
-  const size = searchParams.size ?? 10;
-
   const youtubeContentList = await getYoutubeContents(searchParams);
 
   return (
