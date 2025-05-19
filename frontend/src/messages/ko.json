@@ -21,5 +21,10 @@
       "scores" : "악보",
       "donate" : "후원"
     }
+  },
+  "video": {
+    "list": {
+      "title": "영상 목록"
+    }
   }
 }
