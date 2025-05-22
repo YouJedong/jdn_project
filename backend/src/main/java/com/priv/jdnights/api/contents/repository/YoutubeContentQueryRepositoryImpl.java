@@ -11,6 +11,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
@@ -48,11 +50,11 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
     }
 
     @Override
-    public List<YoutubeContentListDto> findContents(YoutubeContentSearchDto searchDto, Pageable pageable) {
+    public Page<YoutubeContentListDto> findContents(YoutubeContentSearchDto searchDto, Pageable pageable) {
         QYoutubeContent y = QYoutubeContent.youtubeContent;
         QContentLang cl = QContentLang.contentLang;
 
-        return queryFactory
+        List<YoutubeContentListDto> contentList = queryFactory
                 .select(new QYoutubeContentListDto(
                         y.id,
                         cl.contentName,
@@ -69,6 +71,17 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        long total = queryFactory
+                .select(y.count())
+                .from(y)
+                .join(y.contentLangList, cl)
+                .where(
+                    cl.langCode.eq(searchDto.getLangCode())
+                )
+                .fetchOne();
+
+        return new PageImpl<>(contentList, pageable, total);
     }
 
     private OrderSpecifier<?> getOrder(String orderType, QYoutubeContent y) {

@@ -9,6 +9,7 @@ import com.priv.jdnights.api.contents.enums.VideoType;
 import com.priv.jdnights.api.contents.repository.YoutubeContentSearchDto;
 import com.priv.jdnights.api.contents.service.ContentService;
 import com.priv.jdnights.common.dto.ApiResponse;
+import com.priv.jdnights.common.dto.PaginatedResponse;
 import com.priv.jdnights.common.dto.ResultMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +40,7 @@ public class ContentRestController {
     }
 
     @GetMapping("/yt")
-    public ApiResponse<List<YoutubeContentListDto>> getYoutubeContents(YoutubeContentSearchDto searchDto, Pageable pageable) {
+    public ApiResponse<PaginatedResponse<YoutubeContentListDto>> getYoutubeContents(YoutubeContentSearchDto searchDto, Pageable pageable) {
         return new ApiResponse<>(contentService.getYoutubeContents(searchDto, pageable));
     }
 }

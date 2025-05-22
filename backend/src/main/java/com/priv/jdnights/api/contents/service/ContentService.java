@@ -9,8 +9,10 @@ import com.priv.jdnights.api.contents.mapper.ContentMapper;
 import com.priv.jdnights.api.contents.repository.*;
 import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.config.LangContext;
+import com.priv.jdnights.common.dto.PaginatedResponse;
 import com.priv.jdnights.common.dto.ResultMap;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,11 +48,19 @@ public class ContentService {
         return contents;
     }
 
-    public List<YoutubeContentListDto> getYoutubeContents(YoutubeContentSearchDto searchDto, Pageable pageable) {
+    public PaginatedResponse<YoutubeContentListDto> getYoutubeContents(YoutubeContentSearchDto searchDto, Pageable pageable) {
         searchDto.setLangCode(LangContext.get());
 
-        List<YoutubeContentListDto> contents = youtubeContentRepository.findContents(searchDto, pageable);
+        Page<YoutubeContentListDto> pageResult = youtubeContentRepository.findContents(searchDto, pageable);
 
-        return contents;
+        PaginatedResponse<YoutubeContentListDto> response = new PaginatedResponse<>(
+                pageResult.getContent(),
+                pageResult.getNumber(),
+                pageResult.getSize(),
+                pageResult.getTotalPages(),
+                pageResult.getTotalElements()
+        );
+
+        return response;
     }
 }
