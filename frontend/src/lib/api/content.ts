@@ -5,6 +5,7 @@ import { fetchWithLangServer } from '@/lib/common/fetchWithLangServer'
 export interface YoutubeSearchParams {
   page?: string;
   size?: string;
+  keyword?: string;
 }
 
 interface PaginatedResponse<T> {
@@ -72,10 +73,12 @@ export async function getPopularFullscoreContents(): Promise<PopularFullScoreCon
 export async function getYoutubeContents(params: YoutubeSearchParams) : Promise<PaginatedResponse<YoutubeContent>> {
   const page = params.page ?? '0';
   const size = params.size ?? '8';
+  const keyword = params.keyword ?? '';
 
   const query = new URLSearchParams({
     page,
     size,
+    keyword
   });
 
   const res = await fetchWithLangServer(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt?${query.toString()}`, {

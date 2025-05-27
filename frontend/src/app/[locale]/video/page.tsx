@@ -7,6 +7,7 @@ interface Props {
   searchParams: {
     page?: string;
     size?: string;
+    keyword?: string;
   }
   
 }
@@ -15,11 +16,26 @@ interface Props {
 export default async function VideoListPage({ searchParams } : Props) {
   const t = await getTranslations();
   const page = Number(searchParams.page ?? 0);
-  const { content: youtubeContents, pageNumber, totalPages } = await getYoutubeContents(searchParams);
+  const keyword = searchParams.keyword
+  const { content: youtubeContents, totalPages } = await getYoutubeContents(searchParams);
 
   return (
     <div className="px-6 py-10">
       <h1 className="text-2xl font-bold mb-4">{t('video.list.title')}</h1>
+
+      <div className='border rounded-lg border-gray-300 w-80 h-12 mb-5 flex items-center p-2'>
+        <Image src="/magnifier.png" alt='찾기' width={28} height={28} />
+        <form action="/video" method="GET">
+          <input 
+            type="text"
+            name="keyword"
+            defaultValue={keyword ?? ''}
+            placeholder="검색어를 입력하세요"
+            className='ml-2 w-full focus:outline-none'
+          />
+        </form>
+      </div>
+
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
         {youtubeContents.map((item) => (
           <Link href={`/content/${item.id}`} key={item.id} className="block">

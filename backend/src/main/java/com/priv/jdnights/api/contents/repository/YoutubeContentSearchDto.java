@@ -7,4 +7,5 @@ public class YoutubeContentSearchDto {
 
     private String orderType;
     private String langCode;
+    private String keyword;
 }

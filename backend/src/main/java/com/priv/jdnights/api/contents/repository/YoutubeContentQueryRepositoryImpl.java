@@ -8,6 +8,7 @@ import com.priv.jdnights.api.contents.entity.QContentLang;
 import com.priv.jdnights.api.contents.entity.QYoutubeContent;
 import com.priv.jdnights.api.contents.enums.VideoType;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -65,7 +67,8 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
                 .from(y)
                 .join(y.contentLangList, cl)
                 .where(
-                    cl.langCode.eq(searchDto.getLangCode())
+                    cl.langCode.eq(searchDto.getLangCode()),
+                    keywordLikeCondition(cl, searchDto.getKeyword())
                 )
                 .orderBy(this.getOrder(searchDto.getOrderType(), y))
                 .offset(pageable.getOffset())
@@ -77,7 +80,8 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
                 .from(y)
                 .join(y.contentLangList, cl)
                 .where(
-                    cl.langCode.eq(searchDto.getLangCode())
+                    cl.langCode.eq(searchDto.getLangCode()),
+                    keywordLikeCondition(cl, searchDto.getKeyword())
                 )
                 .fetchOne();
 
@@ -95,6 +99,12 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
         }
 
         return null;
+    }
+
+    private BooleanExpression keywordLikeCondition(QContentLang cl, String keyword) {
+        return StringUtils.hasText(keyword)
+                ? cl.contentName.containsIgnoreCase(keyword).or(cl.description.containsIgnoreCase(keyword))
+                : null;
     }
 
 }
