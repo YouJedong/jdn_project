@@ -3,11 +3,14 @@ import { getYoutubeContents } from '@/lib/api/content'
 import Link from 'next/link';
 import Image from 'next/image';
 
+import SortSelector from '../_components/SortSelector';
+
 interface Props {
   searchParams: {
     page?: string;
     size?: string;
     keyword?: string;
+    sort?: string;
   }
   
 }
@@ -15,25 +18,36 @@ interface Props {
 
 export default async function VideoListPage({ searchParams } : Props) {
   const t = await getTranslations();
+
   const page = Number(searchParams.page ?? 0);
   const keyword = searchParams.keyword
+  const sort = searchParams.sort ?? 'popular';
+
   const { content: youtubeContents, totalPages } = await getYoutubeContents(searchParams);
 
   return (
     <div className="px-6 py-10">
       <h1 className="text-2xl font-bold mb-4">{t('video.list.title')}</h1>
 
-      <div className='border rounded-lg border-gray-300 w-80 h-12 mb-5 flex items-center p-2'>
-        <Image src="/magnifier.png" alt='찾기' width={28} height={28} />
+      <div >
         <form action="/video" method="GET">
-          <input 
-            type="text"
-            name="keyword"
-            defaultValue={keyword ?? ''}
-            placeholder="검색어를 입력하세요"
-            className='ml-2 w-full focus:outline-none'
-          />
+          <div className='flex justify-between item-center w-80 mb-5'>
+            <div className='flex item-center border rounded-lg border-gray-300 w-80 h-12 p-2 w-[calc(100%-100px)]'>
+              <Image src="/magnifier.png" alt='찾기' width={28} height={28} />
+              <input 
+                type="text"
+                name="keyword"
+                defaultValue={keyword ?? ''}
+                placeholder="검색어를 입력하세요"
+                className='ml-2 w-full focus:outline-none'
+              />
+            </div>
+            <div className='ml-2 w-[100px]'>
+              <SortSelector defaultValue={sort} />
+            </div>
+          </div>
         </form>
+       
       </div>
 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
