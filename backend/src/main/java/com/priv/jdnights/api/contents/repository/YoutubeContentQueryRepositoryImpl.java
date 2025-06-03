@@ -92,13 +92,15 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
         if (orderType == null) return y.id.desc(); // 기본 정렬
 
         switch (orderType) {
-            case "viewCount":
+            case "popular":
                 return y.viewCount.desc();
-            case "likeCount":
-                return y.likeCount.desc();
+            case "latest":
+                return y.externalCreatedAt.desc();
+            case "oldest":
+                return y.externalCreatedAt.asc();
         }
 
-        return null;
+        return y.viewCount.desc();
     }
 
     private BooleanExpression keywordLikeCondition(QContentLang cl, String keyword) {

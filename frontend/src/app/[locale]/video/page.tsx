@@ -4,15 +4,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import SortSelector from '../_components/SortSelector';
+import YoutubeListWithToggle from '../_components/YoutubeListWithToggle';
 
 interface Props {
   searchParams: {
     page?: string;
     size?: string;
     keyword?: string;
-    sort?: string;
+    orderType: string;
   }
-  
 }
 
 
@@ -21,7 +21,7 @@ export default async function VideoListPage({ searchParams } : Props) {
 
   const page = Number(searchParams.page ?? 0);
   const keyword = searchParams.keyword
-  const sort = searchParams.sort ?? 'popular';
+  const orderType = searchParams.orderType ?? 'popular';
 
   const { content: youtubeContents, totalPages } = await getYoutubeContents(searchParams);
 
@@ -31,8 +31,8 @@ export default async function VideoListPage({ searchParams } : Props) {
 
       <div >
         <form action="/video" method="GET">
-          <div className='flex justify-between item-center w-80 mb-5'>
-            <div className='flex item-center border rounded-lg border-gray-300 w-80 h-12 p-2 w-[calc(100%-100px)]'>
+          <div className='flex justify-between item-center w-full mb-5'>
+            <div className='flex item-center border rounded-lg border-gray-300 h-12 p-2 w-100px'>
               <Image src="/magnifier.png" alt='찾기' width={28} height={28} />
               <input 
                 type="text"
@@ -42,14 +42,15 @@ export default async function VideoListPage({ searchParams } : Props) {
                 className='ml-2 w-full focus:outline-none'
               />
             </div>
-            <div className='ml-2 w-[100px]'>
-              <SortSelector defaultValue={sort} />
+            <div className='flex'>
+              <SortSelector defaultValue={orderType} />
             </div>
           </div>
         </form>
-       
       </div>
 
+      <YoutubeListWithToggle youtubeContents={youtubeContents} />
+{/* 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
         {youtubeContents.map((item) => (
           <Link href={`/content/${item.id}`} key={item.id} className="block">
@@ -74,6 +75,7 @@ export default async function VideoListPage({ searchParams } : Props) {
           </Link>
         ))}
       </div>
+ */}
       <div className="flex justify-center mt-8 gap-2">
         {/* 맨 처음 페이지로 */}
         {page > 0 && (

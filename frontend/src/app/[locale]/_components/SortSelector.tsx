@@ -7,7 +7,7 @@ type Pros = {
 export default function SortSelector({defaultValue}:Pros) {
   return (
     <select 
-      name='sort' 
+      name='orderType' 
       defaultValue={defaultValue} 
       onChange={e => e.currentTarget.form?.submit()}
     >

@@ -6,6 +6,7 @@ export interface YoutubeSearchParams {
   page?: string;
   size?: string;
   keyword?: string;
+  orderType: string;
 }
 
 interface PaginatedResponse<T> {
@@ -74,11 +75,13 @@ export async function getYoutubeContents(params: YoutubeSearchParams) : Promise<
   const page = params.page ?? '0';
   const size = params.size ?? '8';
   const keyword = params.keyword ?? '';
+  const orderType = params.orderType;
 
   const query = new URLSearchParams({
     page,
     size,
-    keyword
+    keyword,
+    orderType
   });
 
   const res = await fetchWithLangServer(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt?${query.toString()}`, {
@@ -96,5 +99,23 @@ export async function getYoutubeContents(params: YoutubeSearchParams) : Promise<
   }
 
   console.log(result.data);
+  return result.data;
+}
+
+export async function getYoutubeContentDetail(id: string) : Promise<YoutubeContent> {
+  const res = await fetchWithLangServer(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt/${id}`, {
+    next: { revalidate: 60 }
+  });
+  
+  if (!res.ok) {
+    throw new Error('영상 목록 불러오기 실패');
+  }
+
+  const result: ApiResponse<YoutubeContent> = await res.json();
+
+  if (result.code !== '200') {
+    throw new Error(`API 응답 코드 오류: ${result.message}`);
+  }
+  
   return result.data;
 }

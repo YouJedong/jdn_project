@@ -1,10 +1,8 @@
 package com.priv.jdnights.api.contents.controller;
 
 import com.priv.jdnights.api.batch.dto.YoutubeContentDto;
-import com.priv.jdnights.api.contents.dto.PopularFullScoreContentDto;
-import com.priv.jdnights.api.contents.dto.PopularNextClassContentDto;
-import com.priv.jdnights.api.contents.dto.PopularYoutubeContentDto;
-import com.priv.jdnights.api.contents.dto.YoutubeContentListDto;
+import com.priv.jdnights.api.contents.dto.*;
+import com.priv.jdnights.api.contents.entity.YoutubeContent;
 import com.priv.jdnights.api.contents.enums.VideoType;
 import com.priv.jdnights.api.contents.repository.YoutubeContentSearchDto;
 import com.priv.jdnights.api.contents.service.ContentService;
@@ -42,6 +40,11 @@ public class ContentRestController {
     @GetMapping("/yt")
     public ApiResponse<PaginatedResponse<YoutubeContentListDto>> getYoutubeContents(YoutubeContentSearchDto searchDto, Pageable pageable) {
         return new ApiResponse<>(contentService.getYoutubeContents(searchDto, pageable));
+    }
+
+    @GetMapping("/yt/{id}")
+    public ApiResponse<YoutubeContentDetailDto> getYoutubeContentDetail(@PathVariable Long id) {
+        return new ApiResponse<>(contentService.getYoutubeContentDetail(id));
     }
 }
 

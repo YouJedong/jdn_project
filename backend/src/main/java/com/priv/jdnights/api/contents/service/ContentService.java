@@ -11,6 +11,7 @@ import com.priv.jdnights.common.Constants;
 import com.priv.jdnights.common.config.LangContext;
 import com.priv.jdnights.common.dto.PaginatedResponse;
 import com.priv.jdnights.common.dto.ResultMap;
+import com.priv.jdnights.common.exception.LogicException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -62,5 +64,13 @@ public class ContentService {
         );
 
         return response;
+    }
+
+    public YoutubeContentDetailDto getYoutubeContentDetail(Long id) {
+
+        YoutubeContent findContent = youtubeContentRepository.findById(id)
+                .orElseThrow(() -> new LogicException("400", "잘못된 요청입니다."));
+
+        return contentMapper.toYoutubeContentDetailDto(findContent);
     }
 }
