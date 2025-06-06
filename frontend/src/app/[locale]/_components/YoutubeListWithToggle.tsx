@@ -27,7 +27,7 @@ export default function YoutubeListWithToggle({ youtubeContents }: { youtubeCont
 
             <div className={viewType === 'card' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6' : 'flex flex-col gap-4'}>
                 {youtubeContents.map((item) => (
-                <Link href={`/content/yt/${item.id}`} key={item.id} className="block">
+                <Link href={`/video/${item.id}`} key={item.id} className="block">
                     {viewType === 'card' ? (
                     <div className='rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 min-h-[320px]'>
                         <Image src={item.thumbnailUrl} alt={item.contentName} width={400} height={225} className='w-full h-[255px] object-cover' />

@@ -67,10 +67,6 @@ public class ContentService {
     }
 
     public YoutubeContentDetailDto getYoutubeContentDetail(Long id) {
-
-        YoutubeContent findContent = youtubeContentRepository.findById(id)
-                .orElseThrow(() -> new LogicException("400", "잘못된 요청입니다."));
-
-        return contentMapper.toYoutubeContentDetailDto(findContent);
+        return youtubeContentRepository.findDetailInfo(id, LangContext.get());
     }
 }

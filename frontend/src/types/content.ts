@@ -25,4 +25,7 @@ export interface YoutubeContent {
   thumbnailUrl: string;
   likeCount: number;
   viewCount: number;
+  commentCount: number;
+  videoType: string;
+  description: string;
 }

@@ -106,7 +106,7 @@ export async function getYoutubeContentDetail(id: string) : Promise<YoutubeConte
   const res = await fetchWithLangServer(`${process.env.NEXT_PUBLIC_API_URL}/api/content/yt/${id}`, {
     next: { revalidate: 60 }
   });
-  
+
   if (!res.ok) {
     throw new Error('영상 목록 불러오기 실패');
   }
@@ -117,5 +117,7 @@ export async function getYoutubeContentDetail(id: string) : Promise<YoutubeConte
     throw new Error(`API 응답 코드 오류: ${result.message}`);
   }
   
+  console.log(result.data);
+
   return result.data;
 }

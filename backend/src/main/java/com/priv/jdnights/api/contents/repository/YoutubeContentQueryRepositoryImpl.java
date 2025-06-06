@@ -1,9 +1,6 @@
 package com.priv.jdnights.api.contents.repository;
 
-import com.priv.jdnights.api.contents.dto.PopularYoutubeContentDto;
-import com.priv.jdnights.api.contents.dto.QPopularYoutubeContentDto;
-import com.priv.jdnights.api.contents.dto.QYoutubeContentListDto;
-import com.priv.jdnights.api.contents.dto.YoutubeContentListDto;
+import com.priv.jdnights.api.contents.dto.*;
 import com.priv.jdnights.api.contents.entity.QContentLang;
 import com.priv.jdnights.api.contents.entity.QYoutubeContent;
 import com.priv.jdnights.api.contents.enums.VideoType;
@@ -86,6 +83,31 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
                 .fetchOne();
 
         return new PageImpl<>(contentList, pageable, total);
+    }
+
+    @Override
+    public YoutubeContentDetailDto findDetailInfo(Long id, String langCode) {
+        QYoutubeContent yc = QYoutubeContent.youtubeContent;
+        QContentLang cl = QContentLang.contentLang;
+
+        return queryFactory
+                .select(new QYoutubeContentDetailDto(
+                        yc.id,
+                        cl.contentName,
+                        yc.thumbnailUrl,
+                        yc.likeCount,
+                        yc.viewCount,
+                        yc.commentCount,
+                        yc.videoType,
+                        cl.description
+                ))
+                .from(yc)
+                .join(yc.contentLangList, cl)
+                .where(
+                    yc.id.eq(id),
+                    cl.langCode.eq(langCode)
+                )
+                .fetchOne();
     }
 
     private OrderSpecifier<?> getOrder(String orderType, QYoutubeContent y) {
