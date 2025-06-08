@@ -28,7 +28,7 @@ export default async function HomePage({params}: {params: { locale: string }}) {
       <div id="performance-tab">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {performanceData.map((item) => (
-            <Link href={`/contents/${item.id}`} key={item.id} className="block">
+            <Link href={`/video/${item.id}`} key={item.id} className="block">
               <div className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 min-h-[320px]">
                 <Image
                   src={item.thumbnailUrl}

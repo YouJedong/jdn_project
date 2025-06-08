@@ -17,10 +17,11 @@ public class YoutubeContentDetailDto {
     private Long commentCount;
     private VideoType videoType;
     private String description;
+    private String videoId;
 
     @QueryProjection
     public YoutubeContentDetailDto(Long id, String contentName, String thumbnailUrl, Long likeCount, Long viewCount
-        , Long commentCount, VideoType videoType, String description
+        , Long commentCount, VideoType videoType, String description, String videoId
     ) {
         this.id = id;
         this.contentName = contentName;
@@ -30,6 +31,7 @@ public class YoutubeContentDetailDto {
         this.commentCount = commentCount;
         this.videoType = videoType;
         this.description = description;
+        this.videoId = videoId;
     }
 }
 

@@ -28,4 +28,5 @@ export interface YoutubeContent {
   commentCount: number;
   videoType: string;
   description: string;
+  videoId: string;
 }

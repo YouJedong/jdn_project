@@ -99,7 +99,8 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
                         yc.viewCount,
                         yc.commentCount,
                         yc.videoType,
-                        cl.description
+                        cl.description,
+                        yc.externalId
                 ))
                 .from(yc)
                 .join(yc.contentLangList, cl)
