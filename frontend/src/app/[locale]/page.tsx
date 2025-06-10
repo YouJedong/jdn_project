@@ -54,7 +54,7 @@ export default async function HomePage({params}: {params: { locale: string }}) {
       <div id="lesson-tab" className="hidden">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {lessonData.map((item) => (
-            <Link href={`/contents/${item.id}`} key={item.id} className="block">
+            <Link href={`/video/${item.id}`} key={item.id} className="block">
               <div className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 min-h-[320px]">
                 <Image
                   src={item.thumbnailUrl}
@@ -83,7 +83,7 @@ export default async function HomePage({params}: {params: { locale: string }}) {
         <h1 className="text-2xl font-bold mb-4">{t('home.pupularLecture')}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {lectures.map((item) => (
-            <Link href={`/contents/${item.id}`} key={item.id} className="block">
+            <Link href={`/not-found`} key={item.id} className="block">
               <div className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 min-h-[320px]">
                 <Image
                   src={item.thumbnailUrl}
@@ -114,7 +114,7 @@ export default async function HomePage({params}: {params: { locale: string }}) {
         <h1 className="text-2xl font-bold mb-4">{t('home.pupularSheet')}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {sheets.map((item) => (
-            <Link href={`/contents/${item.id}`} key={item.id} className="block">
+            <Link href={`/not-found`} key={item.id} className="block">
               <div className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 min-h-[320px]">
                 <Image
                   src={item.thumbnailUrl}

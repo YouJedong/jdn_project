@@ -1,4 +1,5 @@
 import { getYoutubeContentDetail } from '@/lib/api/content'
+import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export default async function VideoDetailPage({ params }: Props) {
+    const t = await getTranslations();
     const { id } = await params;
 
     const contentInfo = await getYoutubeContentDetail(id);
@@ -48,7 +50,7 @@ export default async function VideoDetailPage({ params }: Props) {
                               : 'bg-green-100 text-green-700'}
                           `}
                       >
-                        {contentInfo.videoType === 'PERFORMANCE' ? '연주' : '강의'}
+                        {contentInfo.videoType === 'PERFORMANCE' ? t('home.tabPerformance') : t('home.tabLesson')}
                       </div>
                     </div>
 
@@ -58,11 +60,11 @@ export default async function VideoDetailPage({ params }: Props) {
                       rel="noopener noreferrer"
                       className="inline-block mt-4 px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded hover:bg-red-700 self-start"
                     >
-                      YouTube에서 보기
+                      {t('video.detail.watchOnYoutube')}
                     </a>
                 </div>
             </div>
-            <div className='font-bold text-2xl mt-5 mb-2'>설명</div>
+            <div className='font-bold text-2xl mt-5 mb-2'>{t('video.detail.desc')}</div>
             <div className="border border-gray-300 rounded-lg px-4 lg:px-5 py-6 lg:py-8">
               <div className="text-sm whitespace-pre-line break-words">{contentInfo.description}</div>
             </div>

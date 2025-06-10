@@ -4,19 +4,41 @@
     "description": "A site where I showcase my guitar performances, tutorials, and sheet music."
   },
   "home": {
-    "title": "Hello! This is the home page."
+    "pupularVideo": "Popular YouTube Videos",
+    "pupularLecture": "Popular Lectures",
+    "pupularSheet": "Popular Sheet Music",
+    "tabPerformance": "Performance",
+    "tabLesson": "Lesson"
   },
   "header": {
-    "lang" : {
+    "lang": {
       "ko": "Korean",
-      "en": "English" 
+      "en": "English"
     },
     "nav": {
       "home": "Home",
       "video": "Video",
       "lectures": "Lectures",
-      "scores" : "Scores",
-      "donate" : "Donate"
+      "scores": "Scores",
+      "donate": "Donate"
     }
+  },
+  "video": {
+    "list": {
+      "title": "Video List",
+      "keyword": "Enter a keyword.",
+      "sort": {
+        "popular": "Popular",
+        "new": "Newest",
+        "old": "Oldest"
+      }
+    },
+    "detail": {
+      "desc": "Description",
+      "watchOnYoutube": "Watch on YouTube"
+    }
+  },
+  "not-found": {
+    "desc": "Coming soon."
   }
 }

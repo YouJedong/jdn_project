@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import {useTranslations} from 'next-intl';
 
 export default function PopularYoutubeTab() {
     const [activeTab, setActiveTab] = useState<'PERFORMANCE' | 'LECTURE'>('PERFORMANCE');
+    const t = useTranslations();
 
     const showTab = (tab: 'PERFORMANCE' | 'LECTURE') => {
       setActiveTab(tab);
@@ -20,7 +22,7 @@ export default function PopularYoutubeTab() {
           activeTab === 'PERFORMANCE' ? 'bg-black text-white' : 'bg-white text-black'
         }`}
       >
-        연주
+        {t('home.tabPerformance')}
       </button>
       <button
         onClick={() => showTab('LECTURE')}
@@ -28,7 +30,7 @@ export default function PopularYoutubeTab() {
           activeTab === 'LECTURE' ? 'bg-black text-white' : 'bg-white text-black'
         }`}
       >
-        강의
+        {t('home.tabLesson')}
       </button>
     </div>
   );

@@ -2,8 +2,7 @@
 
 export default function Footer() {
   return (
-    <footer className="p-4 bg-gray-100 mt-10 text-center">
-      <p>© 2025 My Site</p>
+    <footer className="py-10 ml-5 mr-5 border-t border-gray-200 mt-10 text-center">
+      <p>© JDnights</p>
     </footer>
   );
-}

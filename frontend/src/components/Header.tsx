@@ -15,7 +15,7 @@ export default function Header() {
   const navItems = [
     { href: '/', label: t('nav.home') },
     { href: '/video', label: t('nav.video') },
-    { href: '/lectures', label: t('nav.lectures') },
+    { href: '/lectures', label: t('nav.lectures') }, // /not-found
     { href: '/scores', label: t('nav.scores') },
     { href: '/donate', label: t('nav.donate') }
   ];
@@ -53,7 +53,7 @@ export default function Header() {
           return (
             <Link
               key={href}
-              href={href}
+              href={['/lectures', '/scores', '/donate'].includes(href) ? '/not-found' : href}
               className={isActive ? 'font-bold' : ''}
             >
               {label}

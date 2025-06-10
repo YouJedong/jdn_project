@@ -38,7 +38,7 @@ export default async function VideoListPage({ searchParams } : Props) {
                 type="text"
                 name="keyword"
                 defaultValue={keyword ?? ''}
-                placeholder="검색어를 입력하세요"
+                placeholder={t('video.list.keyword')}
                 className='ml-2 w-full focus:outline-none'
               />
             </div>
@@ -50,32 +50,7 @@ export default async function VideoListPage({ searchParams } : Props) {
       </div>
 
       <YoutubeListWithToggle youtubeContents={youtubeContents} />
-{/* 
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
-        {youtubeContents.map((item) => (
-          <Link href={`/content/${item.id}`} key={item.id} className="block">
-            <div className='rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 min-h[320px]'>
-              <Image
-                src={item.thumbnailUrl}
-                alt={item.contentName}
-                width={400}
-                height={225}
-                className='w-full h-[255px] object-cover'
-              />
-              <div className='p-4'>
-                <div className='text-base font-semibold leading-snug line-clamp-2 min-h-[44px]'>
-                  {item.contentName}
-                </div>
-                <p className='text-sm text-gray-500 mt-2 flex items-center gap-2'>
-                  <Image src="/like.png" alt="좋아요" width={15} height={15} />{item.likeCount.toLocaleString()}
-                  <Image src="/eye.png" alt="조회수" width={16} height={16} />{item.viewCount.toLocaleString()}
-                </p>
-              </div>              
-            </div>
-          </Link>
-        ))}
-      </div>
- */}
+
       <div className="flex justify-center mt-8 gap-2">
         {/* 맨 처음 페이지로 */}
         {page > 0 && (
