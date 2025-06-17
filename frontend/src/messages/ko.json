@@ -35,7 +35,7 @@
     },
     "detail": {
       "desc": "설명",
-      "showYoutube": "YouTube에서 보기"
+      "watchOnYoutube": "YouTube에서 보기"
     }
   },
   "not-found": {
