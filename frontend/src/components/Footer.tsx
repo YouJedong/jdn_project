@@ -6,3 +6,4 @@ export default function Footer() {
       <p>© JDnights</p>
     </footer>
   );
+}
