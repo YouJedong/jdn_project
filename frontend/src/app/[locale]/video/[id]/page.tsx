@@ -2,14 +2,10 @@ import { getYoutubeContentDetail } from '@/lib/api/content'
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 
-interface Props {
-    params: { id: string };
-
-}
-
-export default async function VideoDetailPage({ params }: Props) {
+export default async function VideoDetailPage(props: any) {
+    const { params } = props;
+    const { id } = params;
     const t = await getTranslations();
-    const { id } = await params;
 
     const contentInfo = await getYoutubeContentDetail(id);
     

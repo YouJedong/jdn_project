@@ -1,20 +1,15 @@
 import '@/app/globals.css';
-import {ReactNode} from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {getTranslations} from 'next-intl/server';
 import {NextIntlClientProvider} from 'next-intl';
 import getRequestConfig from '@/i18n/request'; 
 
-type Props = {
-  children: ReactNode;
-  params: {
-    locale: string;
-  };
-};
-
-export default async function LocaleLayout({ children, params }: Props) {
-  const {locale} = await params;
+export default async function LocaleLayout(
+  props: any 
+) {
+  const { children, params } = props;
+  const locale = params.locale;
   const t = await getTranslations();
   const title = t('meta.title');
   const description = t('meta.description');

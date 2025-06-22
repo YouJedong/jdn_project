@@ -6,19 +6,10 @@ import Image from 'next/image';
 import SortSelector from '../_components/SortSelector';
 import YoutubeListWithToggle from '../_components/YoutubeListWithToggle';
 
-interface Props {
-  searchParams: {
-    page?: string;
-    size?: string;
-    keyword?: string;
-    orderType: string;
-  }
-}
-
-
-export default async function VideoListPage({ searchParams } : Props) {
+export default async function VideoListPage(props: any) {
   const t = await getTranslations();
 
+  const { searchParams } = props;
   const page = Number(searchParams.page ?? 0);
   const keyword = searchParams.keyword
   const orderType = searchParams.orderType ?? 'popular';

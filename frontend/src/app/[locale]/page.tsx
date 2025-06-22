@@ -9,9 +9,8 @@ export async function generateStaticParams() {
   return routing.locales.map((locale) => ({locale}));
 }
 
-export default async function HomePage({params}: {params: { locale: string }}) {
+export default async function HomePage() {
   const t = await getTranslations();
-  const { locale } = await params
 
   const [performanceData, lessonData, lectures, sheets] = await Promise.all([
     getPopularYoutubeContents('PERFORMANCE'),
