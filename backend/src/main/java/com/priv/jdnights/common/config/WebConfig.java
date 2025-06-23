@@ -2,6 +2,7 @@ package com.priv.jdnights.common.config;
 
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -17,6 +18,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(langInterceptor)
-                .addPathPatterns("/**"); // 전체 경로에 적용
+                .addPathPatterns("/api/**"); // 전체 경로에 적용
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/aps/**").allowedOrigins("http://localhost:3000", "https://jdnights-dev.com");
     }
 }
