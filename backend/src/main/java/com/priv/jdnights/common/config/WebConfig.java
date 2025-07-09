@@ -18,11 +18,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(langInterceptor)
-                .addPathPatterns("/api/**"); // 전체 경로에 적용
+                .addPathPatterns("/**"); // 전체 경로에 적용
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/aps/**").allowedOrigins("http://localhost:3000", "https://jdnights-dev.com");
-    }
+
 }
