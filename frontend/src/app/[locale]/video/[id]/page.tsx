@@ -1,3 +1,4 @@
+export const revalidate = 43200;
 import { getYoutubeContentDetail } from '@/lib/api/content'
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';

@@ -1,3 +1,4 @@
+export const revalidate = 43200;
 import { getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { getPopularYoutubeContents, getPopularNextclassContents, getPopularFullscoreContents } from '@/lib/api/content';

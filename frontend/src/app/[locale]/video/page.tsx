@@ -1,3 +1,4 @@
+export const revalidate = 43200;
 import { getTranslations } from 'next-intl/server';
 import { getYoutubeContents } from '@/lib/api/content'
 import Link from 'next/link';
