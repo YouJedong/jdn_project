@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:dev": "cross-env NODE_ENV=development ENV_FILE=.env.dev next build",
+    "build:dev": "cross-env NODE_ENV=production ENV_FILE=.env.dev next build",
     "build:prod": "cross-env NODE_ENV=production ENV_FILE=.env.production next build"
   },
   "dependencies": {
