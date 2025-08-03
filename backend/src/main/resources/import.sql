@@ -1,1 +1,1 @@
-INSERT INTO `TEST_DB`.`batch_setting` (`batch_name_type`, `cron_expression`, `status`, `created_by`) VALUES ('001', '0 * * * * *', 'ACTIVE', 'jedong');
+INSERT INTO `batch_setting` (`batch_name_type`, `cron_expression`, `status`, `created_by`) VALUES ('001', '0 * * * * *', 'ACTIVE', 'jedong');

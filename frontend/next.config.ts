@@ -1,10 +1,14 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+const path = require('path');
 
-/** @type {import('next').NextConfig} */
+const envFile = process.env.ENV_FILE || '.env';
+dotenv.config({ path: path.resolve(__dirname, envFile) });
+
 const createNextIntlPlugin = require('next-intl/plugin');
 
 const withNextIntl = createNextIntlPlugin();
 
+/** @type {import('next').NextConfig} */
 const nextConfig = withNextIntl({
   eslint: {
     ignoreDuringBuilds: true,
