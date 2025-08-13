@@ -80,6 +80,7 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
                 .from(y)
                 .join(y.contentLangList, cl)
                 .where(
+                    y.status.eq(ContentStatus.VISIBLE),
                     cl.langCode.eq(searchDto.getLangCode()),
                     keywordLikeCondition(cl, searchDto.getKeyword())
                 )
