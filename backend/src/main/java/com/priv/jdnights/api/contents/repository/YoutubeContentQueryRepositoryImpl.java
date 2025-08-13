@@ -3,6 +3,7 @@ package com.priv.jdnights.api.contents.repository;
 import com.priv.jdnights.api.contents.dto.*;
 import com.priv.jdnights.api.contents.entity.QContentLang;
 import com.priv.jdnights.api.contents.entity.QYoutubeContent;
+import com.priv.jdnights.api.contents.enums.ContentStatus;
 import com.priv.jdnights.api.contents.enums.VideoType;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -39,6 +40,7 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
                 .from(y)
                 .join(y.contentLangList, cl)
                 .where(
+                    y.status.eq(ContentStatus.VISIBLE),
                     y.videoType.eq(videoType),
                     cl.langCode.eq(langCode)
                 )
@@ -64,6 +66,7 @@ public class YoutubeContentQueryRepositoryImpl implements YoutubeContentQueryRep
                 .from(y)
                 .join(y.contentLangList, cl)
                 .where(
+                    y.status.eq(ContentStatus.VISIBLE),
                     cl.langCode.eq(searchDto.getLangCode()),
                     keywordLikeCondition(cl, searchDto.getKeyword())
                 )
