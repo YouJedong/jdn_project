@@ -40,10 +40,13 @@ export default function Header() {
             <option value="en">🇺🇸 {t('lang.en')}</option>
           </select>
         </div>
-        <div className="h-full flex items-center justify-center">
-          <Link href="/" className="text-6xl font-bold">
-            JDnights
-          </Link> 
+        <div className="h-full flex flex-col items-center justify-center">
+          <div>
+            <Link href="/" className="text-6xl font-bold">
+              JDnights.Beta
+            </Link> 
+          </div>
+          <div className=''>This site is currently in beta.</div>
         </div>
       </header>
       <nav className="h-12 flex justify-center items-center gap-14 border-b border-gray-200">
