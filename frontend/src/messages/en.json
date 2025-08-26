@@ -1,7 +1,19 @@
 {
-  "meta": {
-    "title": "My Music Content Site",
-    "description": "A site where I showcase my guitar performances, tutorials, and sheet music."
+   "meta": {
+    "common": {
+      "title": "JDnights",
+      "description": "This is JDnights' site for fingerstyle performances, lessons, and sheet music."
+    },
+    "home": {
+      "title": "Home",
+      "description": "Here you can find JDnights' popular fingerstyle YouTube videos, sheet music, and lessons."
+    },
+    "video": {
+      "list": {
+        "title": "YouTube Video List",
+        "description": "Check out JDnights' fingerstyle guitar performances and lesson videos."
+      }
+    }
   },
   "home": {
     "pupularVideo": "Popular YouTube Videos",

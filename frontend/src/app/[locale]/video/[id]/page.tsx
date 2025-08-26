@@ -1,11 +1,44 @@
 export const revalidate = 43200;
 import { getYoutubeContentDetail } from '@/lib/api/content'
+import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 
+export async function generateMetadata(props: any): Promise<Metadata> {
+  const { locale, params } = props;
+  const { id } = await params;
+
+  const contentInfo = await getYoutubeContentDetail(id);
+
+  return {
+    title: contentInfo.contentName,
+    description: contentInfo.description?.slice(0, 150),
+    openGraph: {
+      title: contentInfo.contentName,
+      description: contentInfo.description?.slice(0, 150),
+      url: `/${locale}/video/${id}`,
+      images: [
+        {
+          url: contentInfo.thumbnailUrl,
+          width: 1280,
+          height: 720,
+          alt: contentInfo.contentName
+        },
+      ],
+    },
+    alternates: {
+      canonical: `/${locale}/video/${id}`,
+      languages: {
+        ko: `/ko/video/${id}`,
+        en: `/en/video/${id}`
+      }
+    }
+  }
+}
+
 export default async function VideoDetailPage(props: any) {
     const { params } = props;
-    const { id } = params;
+    const { id } = await params;
     const t = await getTranslations();
 
     const contentInfo = await getYoutubeContentDetail(id);

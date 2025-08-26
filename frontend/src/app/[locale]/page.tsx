@@ -5,6 +5,20 @@ import { getPopularYoutubeContents, getPopularNextclassContents, getPopularFulls
 import PopularYoutubeTab from './_components/PopularYoutubeTab';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Metadata } from 'next';
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  const { locale } = props;
+  const t = await getTranslations({ locale })
+  return {
+    title: t('meta.home.title'),
+    description: t('meta.home.description'),
+    openGraph: {
+      title: t('meta.home.title'),
+      description: t('meta.home.description')
+    }
+  }
+}
 
 export async function generateStaticParams() {
   return routing.locales.map((locale) => ({locale}));

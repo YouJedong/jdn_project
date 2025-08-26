@@ -1,7 +1,19 @@
 {
   "meta": {
-    "title": "내 음악 콘텐츠 사이트",
-    "description": "제가 만든 기타 연주, 강의, 악보 콘텐츠를 한 곳에 모은 사이트입니다."
+    "common": {
+      "title": "JDnights",
+      "description": "JDnights의 핑거스타일 연주, 강의, 악보 사이트 입니다."
+    },
+    "home": {
+      "title": "Home",
+      "description": "JDnights의 핑거스타일 인기 유튜브 영상 목록, 인기 악보 목록, 인기 강의 목록입니다."
+    },
+    "video": {
+      "list": {
+        "title": "유튜브 영상 목록",
+        "description": "JDnights의 핑거스타일 기타 연주와 강의 영상을 확인하세요"
+      }
+    }
   },
   "home": {
     "pupularVideo": "인기 유튜브 영상",

@@ -1,21 +1,46 @@
 export const revalidate = 43200;
 import { getTranslations } from 'next-intl/server';
-import { getYoutubeContents } from '@/lib/api/content'
+import { getYoutubeContents, YoutubeSearchParams } from '@/lib/api/content'
 import Link from 'next/link';
 import Image from 'next/image';
+import { Metadata } from 'next';
 
 import SortSelector from '../_components/SortSelector';
 import YoutubeListWithToggle from '../_components/YoutubeListWithToggle';
 
-export default async function VideoListPage(props: any) {
+export async function generateMetadata(props: any): Promise<Metadata> {
+  const { locale } = props;
+  const t = await getTranslations({ locale })
+  return {
+    title: t('meta.video.list.title'),
+    description: t('meta.video.list.description'),
+    openGraph: {
+      title: t('meta.video.list.title'),
+      description: t('meta.video.list.description')
+    },
+    alternates: {
+      canonical: `/${locale}/video`, // 대표 URL 설정
+      languages: {
+        ko: '/ko/video',
+        en: '/en/video'
+      }
+    }
+  }
+}
+
+export default async function VideoListPage({ 
+  searchParams, 
+}: {
+  searchParams: Promise<YoutubeSearchParams>
+}) {
   const t = await getTranslations();
+  const params  = await searchParams;
 
-  const { searchParams } = props;
-  const page = Number(searchParams.page ?? 0);
-  const keyword = searchParams.keyword
-  const orderType = searchParams.orderType ?? 'popular';
+  const page = Number(params.page ?? 0);
+  const keyword = params.keyword
+  const orderType = params.orderType ?? 'popular';
 
-  const { content: youtubeContents, totalPages } = await getYoutubeContents(searchParams);
+  const { content: youtubeContents, totalPages } = await getYoutubeContents(params);
 
   return (
     <div className="px-6 py-10">
