@@ -1,8 +1,11 @@
-const dotenv = require('dotenv');
-const path = require('path');
+import dotenv from 'dotenv';
+import path from 'path';
 
-const envFile = process.env.ENV_FILE || '.env';
-dotenv.config({ path: path.resolve(__dirname, envFile) });
+const envFile = process.env.ENV_FILE || '.env.local';
+dotenv.config({ 
+  path: path.resolve(__dirname, envFile), 
+  override: true 
+});
 
 const createNextIntlPlugin = require('next-intl/plugin');
 
