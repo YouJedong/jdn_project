@@ -1,16 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import {Link, useRouter, usePathname} from '@/i18n/navigation';
 import {useTranslations, useLocale} from 'next-intl';
 
 export default function Header() {
   const locale = useLocale();
-  const pathname = usePathname().replace(`/${locale}`, '') || '/';
+  const pathname = usePathname();
   const t = useTranslations('header');
-
   const router = useRouter();
-  const allPathName = usePathname();
 
   const navItems = [
     { href: '/', label: t('nav.home') },
@@ -22,20 +19,18 @@ export default function Header() {
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLocale = e.target.value;
-
-    // 현재 경로에서 locale을 교체
-    const segments = allPathName.split('/');
-    segments[1] = newLocale; // /[locale]/... 구조일 때
-    const newPath = segments.join('/');
-
-    router.push(newPath);
+    router.replace(pathname, {locale: newLocale});
   };
 
   return (
     <>
       <header className="relative bg-white h-40 border-b border-gray-200">
         <div className="absolute top-4 right-4">
-          <select onChange={handleChange} className="border rounded px-2 py-1 text-sm" defaultValue={locale}>
+          <select 
+            onChange={handleChange} 
+            className="border rounded px-2 py-1 text-sm" 
+            defaultValue={locale}
+          >
             <option value="ko">🇰🇷 {t('lang.ko')}</option>
             <option value="en">🇺🇸 {t('lang.en')}</option>
           </select>
