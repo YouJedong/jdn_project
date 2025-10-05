@@ -11,7 +11,7 @@
     "build:prod": "cross-env NODE_ENV=production ENV_FILE=.env.prod next build"
   },
   "dependencies": {
-    "dotenv": "^17.2.1",
+    "dotenv": "^17.2.2",
     "next": "15.2.4",
     "next-intl": "^4.0.2",
     "postcss": "^8.5.3",

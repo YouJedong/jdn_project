@@ -1,13 +1,12 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import createNextIntlPlugin from 'next-intl/plugin';
 
 const envFile = process.env.ENV_FILE || '.env.local';
 dotenv.config({ 
   path: path.resolve(__dirname, envFile), 
   override: true 
 });
-
-const createNextIntlPlugin = require('next-intl/plugin');
 
 const withNextIntl = createNextIntlPlugin();
 
@@ -47,4 +46,4 @@ const nextConfig = withNextIntl({
   },
 });
 
-module.exports = nextConfig
+export default nextConfig;
