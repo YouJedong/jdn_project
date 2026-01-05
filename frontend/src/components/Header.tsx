@@ -46,7 +46,7 @@ export default function Header() {
       </header>
       <nav className="h-12 flex justify-center items-center gap-14 border-b border-gray-200">
         {navItems.map(({ href, label }) => {
-          const isActive = pathname === href;
+          const isActive = pathname === href || pathname.startsWith(`${href}/`);
 
           return (
             <Link
